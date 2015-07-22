@@ -1,4 +1,4 @@
-library(ggvis)
+library(ggplot2)
 library(shiny)
 
 
