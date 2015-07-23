@@ -18,16 +18,7 @@ shinyServer(function(input, output, session) {
                 choices  = c(" ",1:numdose), multiple=TRUE,selectize=TRUE)
   })
   
-  output$table1 = renderTable({
-    if(is.null(origData))
-      return()
-    origData
-  })
-  
-  
-  
-  
-  
+
   output$dosered <- renderUI({
     if(is.null(input$dfile))
       return()    
