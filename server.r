@@ -1,66 +1,88 @@
+library(shiny)
+library(ggplot2)
 source("PKhelpers.R")
 
-shinyServer(function(input, output, session) {
-  #  output$out6 <- renderPrint((input$in6))
-  origData <<- NULL
-  output$dosefile <- renderUI({
-    fileInput("dfile", label="Upload dosing Schedule", accept=c('.csv','.txt','.dat'))
+shinyServer(function(input, output) {
+  #origData<<-NULL
+  output$read_Origfile <- renderUI({
+    fileInput("origfile",label="Insert PK file",accept=c('.csv','.txt','.sim','.dat'))    
+  })
+  
+  output$choose_Xvar <- renderUI({
+    if(is.null(input$origfile))
+      return()    
+    origData.name<-paste(input$origfile$datapath,input$origfile$name,sep="/") 
+    origData<<-read.PKPDdata(input$origfile$datapath)   
+    colnames <- colnames(origData)
+    selectInput("Xvar", "Choose Time variable", 
+                choices  = c(" ",colnames))
   })
   
   
-  output$missd <- renderUI({
-    if(is.null(input$dfile))
-      return()    
-    origData.name<-paste(input$dfile$datapath,input$dfile$name,sep="/") 
-    origData<<-read.csv(input$dfile$datapath) 
-    numdose <- nrow(origData)
-    selectInput("miss", "Choose Missed Doses", 
-                choices  = c(" ",1:numdose), multiple=TRUE,selectize=TRUE)
+  output$choose_Yvar <- renderUI({
+    if(is.null(input$origfile))
+      return()
+    if(is.null(input$origfile) | is.null(origData))
+    { choice.temp<-c(" "," ")
+    } else
+    { choice.temp<-c(" ",colnames(origData))
+    }
+    selectInput("Yvar", "Choose Concentration variable", 
+                choices  =choice.temp )
+  })
+  
+  output$choose_IDvar <- renderUI({
+    if(is.null(input$origfile))
+      return()
+    if(is.null(input$origfile) | is.null(origData))
+    { choice.temp<-c(" "," ")
+    } else
+    { choice.temp<-c(" ",colnames(origData))
+    }    
+    selectInput("IDvar", "Choose ID variable", 
+                choices  =choice.temp )
+  })
+  
+  output$choose_TRT <- renderUI({
+    if(is.null(input$origfile))
+      return()
+    if(is.null(input$origfile) | is.null(origData))
+    { choice.temp<-c(" "," ")
+    } else
+    { choice.temp<-c(" ",colnames(origData))
+    }    
+    
+    selectInput("TRTvar", "Choose Treatment variable", 
+                choices  = choice.temp )
   })
   
 
-  output$dosered <- renderUI({
-    if(is.null(input$dfile))
-      return()    
-    numdose <- nrow(origData)
-    selectInput("dayreduct", "Beginning Dose Reduction", 
-                choices  = c(" ",1:numdose))
+  
+  output$summary <- renderPrint({
+    if(is.null(input$origfile) | is.null(origData))
+    { return()
+    } else
+    { 
+      summary(origData)
+    }
   })
   
-  output$reddose <- renderUI({
-    if(is.null(input$dfile))
-      return()    
-    numericInput("dayreduct", value=NULL,"Reduction Dosage (mg)")
-  })
-  
-  
-  vis <- reactive({
-    dose <- 500
-    schedule <- c(0)
-    time <- 24
-    DS <- dose.prof(dose,time,schedule)
-    PK <- PKsim.data(ka=1,v=600,ke=.05,dose,f=1,DS, t.half=25)
-    samp.time <- as.numeric(input$in6) 
-    if(input$timescale=="Hours") samp.time <- samp.time/24
-    #samp.time <- c(c(.5,1,2,3,4,6,8,9,24,48,72,96,120)/24)
-    PKgraph <- plot.PK(PK,samp.time) %>%
-      add_axis("x", title = "Day") %>%
-      add_axis("y", title = "Concentration")# %>%
-  })
-  vis %>% bind_shiny("plot1")
-  
-  output$table2 = renderTable({
-    if(input$timescale=="Hours") {
-      data.frame(
-        Day = as.integer(ceiling(sort(as.numeric(input$in6))/24)),
-        Hr.Post.Dose = sort(as.numeric(input$in6))
-      )}
-    else{
-      data.frame(
-        Day = as.integer(sort(as.numeric(input$in6))),
-        Hr.Post.Dose = sort(as.numeric(input$in6)*24)
-      )}
-  })
-  
+  output$plot<-renderPlot({
+    if(is.null(input$origfile)| is.null(origData) | is.null(input$Xvar)| is.null(input$Yvar))
+    {  return()
+    } else if(input$Xvar==" " | input$Yvar==" ")
+    { return()
+    } else  
+    {
+      X.name<-input$Xvar
+      Y.name<-input$Yvar
+      x.lim<-range(origData[,input$Xvar],na.rm=TRUE)
+      y.lim<-range(origData[,input$Yvar],na.rm=TRUE)
+      if(input$TRTvar==" ") 
+      {   XYplot.orig(origData,input$Xvar,input$Yvar,x.lim,y.lim)
+        } 
+    }
+  }) #closing render plot
   
 })
+
