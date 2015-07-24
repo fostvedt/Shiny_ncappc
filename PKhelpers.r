@@ -44,14 +44,13 @@ PK.TRT.orig<-function(orig.data,X.name,Y.name,ID.name,TRT)
 #ncappc(obsFile=dsingle, doseNm="Dose", doseAmtNm = "Dose", idNmObs="ID", timeNmObs="Time", concNmObs = "Conc", 
  #      tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs", "Vz_obs", "Cl_obs", "HL_Lambda_z"), noPlot = "TRUE")
 
-NCA.PPC.SINGLE<-function(orig.data,X.name,Y.name,ID.name,TRT,Time, Conc, ID, DOSE)
+NCA.PPC.SINGLE<-function(orig.data,X.name,Y.name,ID.name,DOSE)
 {  
-  X.t<-orig.data[,c(X.name, Time)]
-  Y.t<-orig.data[,c(Y.name, Conc)]
-  ID.t<-orig.data[,c(ID.name, ID)]
-  trt <- orig.data[,TRT]
-  Dose <- orig.data[,c(DOSE, Dose)]
-  new.data<-data.frame(X.t=X.t,Y.t=Y.t,ID.t=ID.t,trt=trt, Dose=Dose)
+  X.t<-orig.data[,c(X.name)]
+  Y.t<-orig.data[,c(Y.name)]
+  ID.t<-orig.data[,c(ID.name)]
+  Dose <- orig.data[,c(DOSE)]
+  new.data<-data.frame(X.t=X.t,Y.t=Y.t,ID.t=ID.t, Dose=Dose)
   ncappc(obsFile = new.data, doseNm = "Dose",
          #concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",  obsLog = "FALSE", 
          idNmObs = "ID.t", timeNmObs = "X.t",

@@ -96,10 +96,16 @@ shinyServer(function(input, output) {
   
   output$table<-renderTable({
     if(is.null(input$origfile) | is.null(input$Xvar)| is.null(input$Yvar))
-      return(
-      NCA.PPC.SINGLE(origData,input$Xvar,input$Yvar,input$IDvar,input$TRTvar, input$Dose) )
-  })  
+      return()
+    else if(input$Xvar==" " | input$Yvar==" ") 
+      return()
+    else if(input$IDvar==" " & input$TRTvar== " ")  
+      XYplot.orig(origData,input$Xvar,input$Yvar)
+    else if(input$Dose==" ")
+      PK.ID.orig(origData,input$Xvar,input$Yvar,input$IDvar)  
+    else
+      NCA.PPC.SINGLE(origData,input$Xvar,input$Yvar,input$IDvar,input$Dose)   
   }) #closing render table
   
-#})
+})
 
