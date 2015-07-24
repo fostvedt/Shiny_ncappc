@@ -3,7 +3,7 @@ library(ggplot2)
 source("PKhelpers.R")
 
 shinyServer(function(input, output) {
-  #origData<<-NULL
+  origData<<-NULL
   output$read_Origfile <- renderUI({
     fileInput("origfile",label="Insert PK file",accept=c('.csv','.txt','.sim','.dat'))    
   })
@@ -68,20 +68,16 @@ shinyServer(function(input, output) {
   })
   
   output$plot<-renderPlot({
-    if(is.null(input$origfile)| is.null(origData) | is.null(input$Xvar)| is.null(input$Yvar))
-    {  return()
-    } else if(input$Xvar==" " | input$Yvar==" ")
-    { return()
-    } else  
-    {
-      X.name<-input$Xvar
-      Y.name<-input$Yvar
-      x.lim<-range(origData[,input$Xvar],na.rm=TRUE)
-      y.lim<-range(origData[,input$Yvar],na.rm=TRUE)
-      if(input$TRTvar==" ") 
-      {   XYplot.orig(origData,input$Xvar,input$Yvar,x.lim,y.lim)
-        } 
-    }
+    if(is.null(input$origfile) | is.null(input$Xvar)| is.null(input$Yvar))
+      return()
+    else if(input$Xvar==" " | input$Yvar==" ") 
+           return()
+    else if(input$IDvar==" " & input$TRTvar== " ")  
+          XYplot.orig(origData,input$Xvar,input$Yvar)
+    else if(input$TRTvar==" ")
+          PK.ID.orig(origData,input$Xvar,input$Yvar,input$IDvar)  
+    else
+          PK.TRT.orig(origData,input$Xvar,input$Yvar,input$IDvar,input$TRTvar)  
   }) #closing render plot
   
 })
