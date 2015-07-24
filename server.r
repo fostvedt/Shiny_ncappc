@@ -1,6 +1,7 @@
 library(shiny)
 library(ggplot2)
 source("PKhelpers.R")
+library(ncappc)
 
 shinyServer(function(input, output) {
   origData<<-NULL
@@ -56,6 +57,19 @@ shinyServer(function(input, output) {
                 choices  = choice.temp )
   })
   
+  output$choose_DOSE <- renderUI({
+    if(is.null(input$origfile))
+      return()
+    if(is.null(input$origfile) | is.null(origData))
+    { choice.temp<-c(" "," ")
+    } else
+    { choice.temp<-c(" ",colnames(origData))
+    }    
+    
+    selectInput("Dose", "Choose Dose", 
+                choices  = choice.temp )
+  })
+  
 
   
   output$summary <- renderPrint({
@@ -80,5 +94,12 @@ shinyServer(function(input, output) {
           PK.TRT.orig(origData,input$Xvar,input$Yvar,input$IDvar,input$TRTvar)  
   }) #closing render plot
   
-})
+  output$table<-renderTable({
+    if(is.null(input$origfile) | is.null(input$Xvar)| is.null(input$Yvar))
+      return(
+      NCA.PPC.SINGLE(origData,input$Xvar,input$Yvar,input$IDvar,input$TRTvar, input$Dose) )
+  })  
+  }) #closing render table
+  
+#})
 
