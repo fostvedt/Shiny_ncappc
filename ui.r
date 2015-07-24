@@ -12,7 +12,7 @@ shinyUI(fluidPage(
   
    
   mainPanel(
-    h4("Summary Statistics"),
+    h4("Summary Statistics and Plot"),
     plotOutput("plot"),
     verbatimTextOutput("summary")
   )
