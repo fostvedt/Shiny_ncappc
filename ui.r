@@ -3,7 +3,8 @@ shinyUI(fluidPage(
   
   sidebarPanel(width = 3,
     uiOutput("read_Origfile"),
-    br(),
+    uiOutput("Route"),
+    uiOutput("DoseSchedule"),
     uiOutput("choose_Xvar"),
     uiOutput("choose_Yvar"),
     uiOutput("choose_IDvar"),
@@ -21,7 +22,10 @@ shinyUI(fluidPage(
               tabPanel("NCA", br(), 
                        h4("NCA Parameter Estimates"), 
                        tableOutput("table")
-                       )
+                       ),
+              tabPanel("NCA Plots", br(), 
+                       h4("NCA Parameter Estimates")
+              )
             ) # close tabsetPanel
   ) #close main Panel
 ))
