@@ -1,0 +1,12 @@
+output$NCA <- ncappc(obsFile = dmultiple,  grNm = NULL, grp =NULL,
+                     flNm = NULL, flag = NULL, doseNm = "Dose", dose = NULL,
+                     concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",
+                     doseNormUnit = NULL, obsLog = "FALSE", idNmObs = "ID", timeNmObs = "Time",
+                     concNmObs = "Conc", AUCTimeRange = c(0,24), backExtrp = "TRUE",
+                     LambdaTimeRange = NULL, LambdaExclude = NULL, doseAmtNm = "Dose",
+                     adminType = "extravascular", doseType = "ss", Tau = 24, TI = NULL,
+                     method = "mixed", timeFormat = "number",  
+                     tabCol = c("AUCtau", "Cmax", "Tmax", "Cavg", "Cmin", 
+                      "Clss", "HL_Lambda_z", "Vss_obs", "Accumulation_Index", "p_Fluctuation"), 
+                     figFormat = "png",  noPlot = "TRUE",
+                     printOut = "FALSE", studyName = NULL)
