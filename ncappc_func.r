@@ -1,7 +1,4 @@
-library(ncappc)
-Loading required package: ggplot2
-Loading required package: gridExtra
-> ncappc
+ncappc <-
 function (obsFile = NULL, simFile = NULL, grNm = NULL, grp = NULL, 
           flNm = NULL, flag = NULL, doseNm = NULL, dose = NULL, concUnit = NULL, 
           timeUnit = NULL, doseUnit = NULL, doseNormUnit = NULL, obsLog = "FALSE", 
@@ -3063,7 +3060,7 @@ function (obsFile = NULL, simFile = NULL, grNm = NULL, grp = NULL,
       }
     }
   }
+  return(ncaOutput)
 }
 <environment: namespace:ncappc>
-  > 
   
