@@ -1,5 +1,6 @@
 library(shiny)
 library(ggplot2)
+library(grid)
 source("PKhelpers.R")
 library(ncappc)
 
@@ -19,6 +20,21 @@ shinyServer(function(input, output) {
                 choices  = c(" ",colnames))
   })
   
+  output$Route <- renderUI({
+    if(is.null(input$origfile) | is.null(origData))
+      return()
+  radioButtons('route', 'Route of Administration',
+               c("extravascular","iv-bolus","iv-infusion")
+  )
+  })
+  
+  output$DoseSchedule <- renderUI({
+    if(is.null(input$origfile) | is.null(origData))
+      return()
+    radioButtons('Sched', 'Dosing',
+                 c("Single dose", "Multiple Dose")
+    )
+  })
   
   output$choose_Yvar <- renderUI({
     if(is.null(input$origfile))
