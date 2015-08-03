@@ -17,16 +17,14 @@ shinyUI(fluidPage(
               tabPanel("Summary", br(), 
                         h4("Summary Statistics and Plot"), 
                         plotOutput("plot"),
-                        verbatimTextOutput("summary")
+                        verbatimTextOutput("summary"),
+                         tableOutput("Data")
                         ),
               tabPanel("NCA", br(), 
                        h4("NCA Parameter Estimates"), 
-                       tableOutput("table")
-                       ),
-              tabPanel("NCA Plots", br(), 
-                       h4("NCA Parameter Estimates")
-              )
-            ) # close tabsetPanel
+                       tableOutput("NCA")
+                       )
+              ) # close tabsetPanel
   ) #close main Panel
 ))
 
