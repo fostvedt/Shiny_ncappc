@@ -97,6 +97,13 @@ shinyServer(function(input, output) {
     }
   })
   
+  output$Data <- renderTable({
+    if(is.null(input$origfile) | is.null(origData))
+      return()
+      else
+        makedata(origData,input$choose_Yvar,input$choose_Xvar)
+  })
+  
   output$plot<-renderPlot({
     if(is.null(input$origfile) | is.null(input$Xvar)| is.null(input$Yvar))
       return()
