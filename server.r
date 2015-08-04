@@ -82,8 +82,7 @@ shinyServer(function(input, output) {
     { choice.temp<-c(" ",colnames(origData))
     }    
     
-    selectInput("Dose", "Choose Dose", 
-                choices  = choice.temp )
+    selectInput("Dose", "Choose Dose", choices = choice.temp )
   })
   
 
@@ -97,12 +96,13 @@ shinyServer(function(input, output) {
     }
   })
   
-  output$Data <- renderTable({
-    if(is.null(input$origfile) | is.null(origData))
-      return()
-      else
-        makedata(origData,input$choose_Yvar,input$choose_Xvar)
+  newEntry <- reactive({
+    newLine <- isolate(c(input$choose_Xvar,input$choose_Yvar,input$choose_IDvar,
+                         input$choose_TRT,input$choose_DOSE))
   })
+  
+  output$Data <-  renderPrint({ newEntry() })
+
   
   output$plot<-renderPlot({
     if(is.null(input$origfile) | is.null(input$Xvar)| is.null(input$Yvar))
