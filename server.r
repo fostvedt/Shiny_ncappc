@@ -85,6 +85,17 @@ shinyServer(function(input, output) {
     selectInput("Dose", "Choose Dose", choices = choice.temp )
   })
   
+  output$choose_extra <- renderUI({
+    if(is.null(input$origfile))
+      return()
+    if(is.null(input$origfile) | is.null(origData))
+    { choice.temp<-c(" "," ")
+    } else
+    { choice.temp<-c(" ",colnames(origData))
+    }    
+    
+    selectInput("Group", "Choose Other Grouping", choices = choice.temp,multiple=T )
+  })
 
   
   output$summary <- renderPrint({
@@ -108,6 +119,41 @@ shinyServer(function(input, output) {
   
   output$Data <-  renderPrint({ head(newEntry()) })
 
+  ####################################################
+  # code for NCA estimation tab
+  ####################################################
+  
+  output$AUC <- renderUI({
+    selectInput("AUCmax", "select AUC interval: (0,Selection)",
+                choices=c(8,12,24,48,72,Inf),selected=24)
+  })
+  
+  ####################################################
+  # code for NCA estimation
+  ####################################################
+  
+  output$NCA = renderTable({
+    #adding a submit button. Will only run once the users clicks the button
+    input$NCAest()
+    
+    
+    ncappc(obsFile = newData(),  grNm = "DAY", grp =NULL,
+           flNm = NULL, flag = NULL, doseNm = "Dose", dose = NULL,
+           concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",
+           doseNormUnit = NULL, obsLog = "FALSE", idNmObs = "ID", timeNmObs = "Time",
+           concNmObs = "Conc", AUCTimeRange = c(0,24), backExtrp = "TRUE",
+           LambdaTimeRange = NULL, LambdaExclude = NULL, doseAmtNm = "Dose",
+           adminType = "extravascular", doseType = "ns", Tau = NULL, TI = NULL,
+           method = "mixed", timeFormat = "number",  
+           tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs",
+                      "Vz_obs", "Cl_obs", "HL_Lambda_z"), figFormat = "png",  noPlot = "TRUE",
+           printOut = "FALSE", studyName = "test")
+    ncaOutput
+  })
+  
+  ####################################################
+  # code for graphics using NCA estimates
+  ####################################################
   
   output$plot<-renderPlot({
     if(is.null(input$origfile) | is.null(input$Xvar)| is.null(input$Yvar))

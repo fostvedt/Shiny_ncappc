@@ -1,4 +1,13 @@
-library(grid)
+
+
+output$AUC <- renderUI({
+  sliderInput("AUCmax", "Number of sampling times", min = 0, max = 48,
+              value = 24, step = 4)
+})
+
+
+
+
 
 output$NCA = renderDataTable({
     input$NCAestimate

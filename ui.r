@@ -10,6 +10,7 @@ shinyUI(fluidPage(
     uiOutput("choose_IDvar"),
     uiOutput("choose_TRT"),
     uiOutput("choose_DOSE"),
+    uiOutput("choose_extra"),
     br()),
   
   mainPanel(width = 9,
@@ -20,7 +21,8 @@ shinyUI(fluidPage(
                        verbatimTextOutput("summary")
                         ),
               tabPanel("PK profile plots", br(), 
-                       h4("PK Profile Plots"),
+                       uiOutput("AUC"),
+                       actionButton("NCAest", "Estimate NCA"),
                        plotOutput("plot")
                        )
               ) # close tabsetPanel

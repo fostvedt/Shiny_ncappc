@@ -1,18 +1,27 @@
 
-makedata <-function(orig.data,X.name,Y.name,ID.name)
-{  
-  X.t<-orig.data[,X.name]
-  Y.t<-orig.data[,Y.name]
-  new.data<-data.frame(X.t=X.t,Y.t=Y.t)
-  new.data
-} 
-
-
 read.PKPDdata<-function(file.name)
 { 
   temp.data<-read.csv(file.name,na.strings=".")
   colnames(temp.data)<-toupper(colnames(temp.data))
   return(temp.data)
+}
+
+#############################################
+# Estimate NCA condensed function
+#############################################
+nca.est <- function(datafile, group1=NULL, AUCrange=c(0,24), dtype = NULL){
+  
+  ncappc(obsFile = datafile,  grNm = NULL, grp = group1,
+         flNm = NULL, flag = NULL, doseNm = "Dose", dose = NULL,
+         concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",
+         doseNormUnit = NULL, obsLog = "FALSE", idNmObs = "ID", timeNmObs = "Time",
+         concNmObs = "Conc", AUCTimeRange = AUCrange, backExtrp = "TRUE",
+         LambdaTimeRange = NULL, LambdaExclude = NULL, doseAmtNm = "Dose",
+         adminType = "extravascular", doseType = dtype, Tau = NULL, TI = NULL,
+         method = "mixed", timeFormat = "number",  
+         tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs",
+                    "Vz_obs", "Cl_obs", "HL_Lambda_z"), figFormat = "png",  noPlot = "TRUE",
+         printOut = "FALSE", studyName = "test")
 }
 
 
