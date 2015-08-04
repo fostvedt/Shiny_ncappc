@@ -97,11 +97,16 @@ shinyServer(function(input, output) {
   })
   
   newEntry <- reactive({
-    newLine <- isolate(c(input$choose_Xvar,input$choose_Yvar,input$choose_IDvar,
-                         input$choose_TRT,input$choose_DOSE))
+    newLine <- c(ID=input$IDvar, 
+                 Time = input$Xvar,
+                 Conc = input$Yvar,
+                 Treatment = input$TRTvar,
+                 Dose = input$Dose)
+    newLine2 <- newLine[which(newLine!= " ")]
+    origData[,newLine2]
   })
   
-  output$Data <-  renderPrint({ newEntry() })
+  output$Data <-  renderPrint({ head(newEntry()) })
 
   
   output$plot<-renderPlot({
