@@ -4,6 +4,7 @@ makedata <-function(orig.data,X.name,Y.name,ID.name)
   X.t<-orig.data[,X.name]
   Y.t<-orig.data[,Y.name]
   new.data<-data.frame(X.t=X.t,Y.t=Y.t)
+  new.data
 } 
 
 
