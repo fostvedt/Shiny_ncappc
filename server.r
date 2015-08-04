@@ -9,6 +9,7 @@ shinyServer(function(input, output) {
   output$read_Origfile <- renderUI({
     fileInput("origfile",label="Insert PK file",accept=c('.csv','.txt','.sim','.dat'))    
   })
+
   
   output$choose_Xvar <- renderUI({
     if(is.null(input$origfile))
@@ -135,6 +136,8 @@ shinyServer(function(input, output) {
   output$NCA = renderTable({
     #adding a submit button. Will only run once the users clicks the button
     input$NCAest()
+    #warnings
+#    if(colnames(newData()) return()
     
     
     ncappc(obsFile = newData(),  grNm = "DAY", grp =NULL,
