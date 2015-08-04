@@ -7,7 +7,7 @@ output$NCA = renderDataTable({
            flNm = NULL, flag = NULL, doseNm = "Dose", dose = NULL,
            concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",
            doseNormUnit = NULL, obsLog = "FALSE", idNmObs = "ID", timeNmObs = "Time",
-           concNmObs = "Conc", AUCTimeRange = c(0,Inf), backExtrp = "TRUE",
+           concNmObs = "Conc", AUCTimeRange = c(0,24), backExtrp = "TRUE",
            LambdaTimeRange = NULL, LambdaExclude = NULL, doseAmtNm = "Dose",
            adminType = "extravascular", doseType = "ns", Tau = NULL, TI = NULL,
            method = "mixed", timeFormat = "number",  
