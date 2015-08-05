@@ -157,9 +157,19 @@ shinyServer(function(input, output) {
                  Time = input$Xvar,
                  Conc = input$Yvar,
                  Treatment = input$TRTvar,
-                 Dose = input$Dose)
+                 Dose = input$Dose,
+                 Group = input$Group)
     newLine2 <- newLine[which(newLine!= " ")]
-    origData[,newLine2]
+    dat <- origData[,newLine2]
+    
+    gnam <- paste("Group",1:length(input$Group))
+    nam <- c("ID","Time","Conc","Treatment","Dose",gnam)
+    
+    if(length(newLine2)<=1){ return(dat)}
+    else{
+    colnames(dat) <- nam[which(newLine!= " ")]
+    return(dat)
+    }
   })
   
   # Showing the user what data variables they have selected for use
@@ -189,21 +199,25 @@ shinyServer(function(input, output) {
     input$NCAest()
     #warnings
 #    if(colnames(newData()) return()
-     
+    ncadat <- newData()
+    pkstate <- ifelse(input$Sched=="Steady State","ss","ns")
     
-    ncappc(obsFile = newData(),  grNm = "DAY", grp =NULL,
+
+    ncappc(obsFile = ncadat,  grNm = "DAY", grp =NULL,
            flNm = NULL, flag = NULL, doseNm = "Dose", dose = NULL,
            concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",
            doseNormUnit = NULL, obsLog = "FALSE", idNmObs = "ID", timeNmObs = "Time",
-           concNmObs = "Conc", AUCTimeRange = c(0,24), backExtrp = "TRUE",
+           concNmObs = "Conc", AUCTimeRange = c(0,input$AUCmax), backExtrp = "TRUE",
            LambdaTimeRange = NULL, LambdaExclude = NULL, doseAmtNm = "Dose",
-           adminType = "extravascular", doseType = "ns", Tau = NULL, TI = NULL,
+           adminType = "extravascular", doseType = pkstate, Tau = NULL, TI = NULL,
            method = "mixed", timeFormat = "number",  
            tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs",
                       "Vz_obs", "Cl_obs", "HL_Lambda_z"), figFormat = "png",  noPlot = "TRUE",
            printOut = "FALSE", studyName = "test")
     ncaOutput
   })
+  
+  
   
   ####################################################
   # code for graphics using NCA estimates
