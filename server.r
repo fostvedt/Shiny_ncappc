@@ -8,12 +8,49 @@ library(ncappc)
 # the script is changed now with this comment.
 
 shinyServer(function(input, output) {
+  
+  ####################################################
+  # 
+  # Code for front page UI
+  # 
+  ####################################################
+  
+  
+  
+  # This is setting up the file upload
+  # The idea is that anyone can upload their own file
+  # and get NCA estimates along with plots
   origData<<-NULL
   output$read_Origfile <- renderUI({
     fileInput("origfile",label="Insert PK file",accept=c('.csv','.txt','.sim','.dat'))    
   })
 
   
+  # This affects the NCA estimation
+  # The options are the specific arguments for the
+  # ncappc function. 
+  output$Route <- renderUI({
+    if(is.null(input$origfile) | is.null(origData))
+      return()
+  radioButtons('route', 'Route of Administration',
+               c("extravascular","iv-bolus","iv-infusion")
+  )
+  })
+  
+  # This affects the NCA. The options in the ncappc function
+  # are "ns" non-steady state
+  # and "ss" for steady state.
+  output$DoseSchedule <- renderUI({
+    if(is.null(input$origfile) | is.null(origData))
+      return()
+    radioButtons('Sched', 'Dosing',
+                 c("Steady State", "Non-Steady State")
+    )
+  })
+  
+  # Time Variable
+  # This UI selects the Time variable. Usually this will
+  # be on the x-axis for a PK-conc plot
   output$choose_Xvar <- renderUI({
     if(is.null(input$origfile))
       return()    
@@ -24,22 +61,9 @@ shinyServer(function(input, output) {
                 choices  = c(" ",colnames))
   })
   
-  output$Route <- renderUI({
-    if(is.null(input$origfile) | is.null(origData))
-      return()
-  radioButtons('route', 'Route of Administration',
-               c("extravascular","iv-bolus","iv-infusion")
-  )
-  })
-  
-  output$DoseSchedule <- renderUI({
-    if(is.null(input$origfile) | is.null(origData))
-      return()
-    radioButtons('Sched', 'Dosing',
-                 c("Single dose", "Multiple Dose")
-    )
-  })
-  
+  # Concentration variable
+  # This UI selects the Concentration variable. Usually this will
+  # be on the y-axis for a PK-conc plot
   output$choose_Yvar <- renderUI({
     if(is.null(input$origfile))
       return()
@@ -52,6 +76,9 @@ shinyServer(function(input, output) {
                 choices  =choice.temp )
   })
   
+  # ID variable
+  # This UI selects the ID variable. Usually this will
+  # be used for stratification as well as estimation
   output$choose_IDvar <- renderUI({
     if(is.null(input$origfile))
       return()
@@ -64,6 +91,9 @@ shinyServer(function(input, output) {
                 choices  =choice.temp )
   })
   
+  # Treatment variable
+  # This UI selects the Treatment variable. Usually this will
+  # be used for stratification as well as estimation
   output$choose_TRT <- renderUI({
     if(is.null(input$origfile))
       return()
@@ -77,6 +107,10 @@ shinyServer(function(input, output) {
                 choices  = choice.temp )
   })
   
+  # Dose variable
+  # This UI selects the Dose variable. Usually this will
+  # be used for stratification as well as estimation
+  # need this to estimate clearance = Dose/AUC
   output$choose_DOSE <- renderUI({
     if(is.null(input$origfile))
       return()
@@ -85,10 +119,12 @@ shinyServer(function(input, output) {
     } else
     { choice.temp<-c(" ",colnames(origData))
     }    
-    
     selectInput("Dose", "Choose Dose", choices = choice.temp )
   })
   
+  # Extra Stratification variables
+  # e.g. fed/fasted
+  # must be selected from the variables uplaoded
   output$choose_extra <- renderUI({
     if(is.null(input$origfile))
       return()
@@ -101,7 +137,9 @@ shinyServer(function(input, output) {
     selectInput("Group", "Choose Other Grouping", choices = choice.temp,multiple=T )
   })
 
-  
+  # This is outputted so that the user can see
+  # what data they have available to choose from when 
+  #selecting the variables for the estimation
   output$summary <- renderPrint({
     if(is.null(input$origfile) | is.null(origData))
     { return()
@@ -111,6 +149,9 @@ shinyServer(function(input, output) {
     }
   })
   
+  # This line is creating a new data frame using only the columns
+  # selected by the user. This will make it easier to 
+  # get the NCA estimates as well as visualize the data
   newEntry <- reactive({
     newLine <- c(ID=input$IDvar, 
                  Time = input$Xvar,
@@ -121,16 +162,23 @@ shinyServer(function(input, output) {
     origData[,newLine2]
   })
   
+  # Showing the user what data variables they have selected for use
+  # in the NCA
   output$Data <-  renderPrint({ head(newEntry()) })
 
   ####################################################
   # code for NCA estimation tab
   ####################################################
   
+  # The function requires an AUC time interval
+  # The default is (0,24)
+  
   output$AUC <- renderUI({
     selectInput("AUCmax", "select AUC interval: (0,Selection)",
                 choices=c(8,12,24,48,72,Inf),selected=24)
   })
+  
+  
   
   ####################################################
   # code for NCA estimation
@@ -141,7 +189,7 @@ shinyServer(function(input, output) {
     input$NCAest()
     #warnings
 #    if(colnames(newData()) return()
-    
+     
     
     ncappc(obsFile = newData(),  grNm = "DAY", grp =NULL,
            flNm = NULL, flag = NULL, doseNm = "Dose", dose = NULL,
