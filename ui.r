@@ -23,6 +23,7 @@ shinyUI(fluidPage(
               tabPanel("PK profile plots", br(), 
                        uiOutput("AUC"),
                        actionButton("NCAest", "Estimate NCA"),
+                       verbatimTextOutput("NCA"),
                        plotOutput("plot")
                        )
               ) # close tabsetPanel
