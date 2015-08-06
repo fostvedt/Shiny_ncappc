@@ -174,8 +174,12 @@ shinyServer(function(input, output) {
   
   # Showing the user what data variables they have selected for use
   # in the NCA
-  output$Data <-  renderPrint({ head(newEntry()) })
-
+  #output$Data <-  renderPrint({ head(newEntry()) })
+  output$Data <-  renderPrint({ 
+    if(is.null(input$origfile) | is.null(origData))
+     return()
+     else  head(origData)
+    })
   ####################################################
   # code for NCA estimation tab
   ####################################################
@@ -194,28 +198,28 @@ shinyServer(function(input, output) {
   # code for NCA estimation
   ####################################################
   
-  output$NCA = renderTable({
-    #adding a submit button. Will only run once the users clicks the button
-    input$NCAest()
-    #warnings
-#    if(colnames(newData()) return()
-    ncadat <- newData()
-    pkstate <- ifelse(input$Sched=="Steady State","ss","ns")
-    
-
-    ncappc(obsFile = ncadat,  grNm = "DAY", grp =NULL,
-           flNm = NULL, flag = NULL, doseNm = "Dose", dose = NULL,
+  output$NCA <- renderPrint({
+    if(is.null(input$origfile) | is.null(origData))
+      return()
+    else
+    origData$DOSE <- as.numeric(as.character(origData$DOSE))
+    ncappc(obsFile = origData,  grNm = "DAY", grp =NULL,
+           flNm = NULL, flag = NULL, doseNm = "DOSE", dose = NULL,
            concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",
-           doseNormUnit = NULL, obsLog = "FALSE", idNmObs = "ID", timeNmObs = "Time",
-           concNmObs = "Conc", AUCTimeRange = c(0,input$AUCmax), backExtrp = "TRUE",
-           LambdaTimeRange = NULL, LambdaExclude = NULL, doseAmtNm = "Dose",
-           adminType = "extravascular", doseType = pkstate, Tau = NULL, TI = NULL,
+           doseNormUnit = NULL, obsLog = "FALSE", idNmObs = "ID", timeNmObs = "TIME",
+           concNmObs = "CONC", AUCTimeRange = c(0,24), backExtrp = "TRUE",
+           LambdaTimeRange = NULL, LambdaExclude = NULL, doseAmtNm = "DOSE",
+           adminType = "extravascular", doseType = "ns", Tau = NULL, TI = NULL,
            method = "mixed", timeFormat = "number",  
            tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs",
                       "Vz_obs", "Cl_obs", "HL_Lambda_z"), figFormat = "png",  noPlot = "TRUE",
            printOut = "FALSE", studyName = "test")
     ncaOutput
-  })
+})
+  
+#  output$NCA = renderPrint({  
+#    NCAd()
+#})
   
   
   
