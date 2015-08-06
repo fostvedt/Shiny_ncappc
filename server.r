@@ -216,7 +216,14 @@ shinyServer(function(input, output) {
   output$NCA <- renderPrint({
     if(is.null(input$origfile) | is.null(origData))
       return()
+    if(ncol(newEntry)<2) return
     else
+    cvar <- c(input$IDvar, input$Xvar, input$Yvar, input$Day, 
+                input$TRTvar, input$Dose, input$Group)
+    
+    
+    
+      
     origData$DOSE <- as.numeric(as.character(origData$DOSE))
     ncappc(obsFile = origData,  grNm = "DAY", grp =NULL,
            flNm = NULL, flag = NULL, doseNm = "DOSE", dose = NULL,
