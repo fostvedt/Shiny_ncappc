@@ -122,6 +122,18 @@ shinyServer(function(input, output) {
     selectInput("Dose", "Choose Dose", choices = choice.temp )
   })
   
+  output$choose_DAY <- renderUI({
+    if(is.null(input$origfile))
+      return()
+    if(is.null(input$origfile) | is.null(origData))
+    { choice.temp<-c(" "," ")
+    } else
+    { choice.temp<-c(" ",colnames(origData))
+    }    
+    selectInput("Day", "Choose Day", choices = choice.temp )
+  })
+  
+  
   # Extra Stratification variables
   # e.g. fed/fasted
   # must be selected from the variables uplaoded
@@ -134,7 +146,8 @@ shinyServer(function(input, output) {
     { choice.temp<-c(" ",colnames(origData))
     }    
     
-    selectInput("Group", "Choose Other Grouping", choices = choice.temp,multiple=T )
+    selectizeInput("Group", "Choose Other Grouping", choices = choice.temp,
+                multiple=T,options = list(maxItems = 3) )
   })
 
   # This is outputted so that the user can see
@@ -156,6 +169,7 @@ shinyServer(function(input, output) {
     newLine <- c(ID=input$IDvar, 
                  Time = input$Xvar,
                  Conc = input$Yvar,
+                 Day = input$Day,
                  Treatment = input$TRTvar,
                  Dose = input$Dose,
                  Group = input$Group)
@@ -163,7 +177,7 @@ shinyServer(function(input, output) {
     dat <- origData[,newLine2]
     
     gnam <- paste("Group",1:length(input$Group))
-    nam <- c("ID","Time","Conc","Treatment","Dose",gnam)
+    nam <- c("ID","Time","Conc","Day","Treatment","Dose",gnam)
     
     if(length(newLine2)<=1){ return(dat)}
     else{
@@ -175,10 +189,11 @@ shinyServer(function(input, output) {
   # Showing the user what data variables they have selected for use
   # in the NCA
   #output$Data <-  renderPrint({ head(newEntry()) })
-  output$Data <-  renderPrint({ 
+  output$Data <-  renderDataTable({ 
     if(is.null(input$origfile) | is.null(origData))
      return()
-     else  head(origData)
+     #else  head(origData)
+    else head(newEntry())
     })
   ####################################################
   # code for NCA estimation tab
