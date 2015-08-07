@@ -184,7 +184,7 @@ shinyServer(function(input, output) {
     colnames(dat) <- nam[which(newLine!= " ")]
     return(dat)
     }
-  })
+  }) 
   
   # Showing the user what data variables they have selected for use
   # in the NCA
@@ -221,8 +221,19 @@ shinyServer(function(input, output) {
     cvar <- c(input$IDvar, input$Xvar, input$Yvar, input$Day, 
                 input$TRTvar, input$Dose, input$Group)
     
-      
+    # origData is the original uploaded dataset. This needs to be 
+    # changed to use the newEntry() data set creaeted by the user based on 
+    # the selections.
+    # Dose must be a integer or numeric variable
     origData$DOSE <- as.numeric(as.character(origData$DOSE))
+    
+    # The newEntry() needs column names assigned to match the 
+    # arguments in the ncappc function. e.g. timeNmObs = "TIME"
+    # If the wrong columns are provided, then the function should not be called.
+    # So if nothing has been slected in input$Xvar (Time) or input$Yvar (Conc), 
+    # then no nca can be calculated.
+    #
+    # grNm can be any grouping variable (selections from input$Extra) e.g. Food
     
     ncappc(obsFile = origData,  grNm = "DAY", grp =NULL,
            flNm = NULL, flag = NULL, doseNm = "DOSE", dose = NULL,
