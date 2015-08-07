@@ -213,18 +213,17 @@ shinyServer(function(input, output) {
   # code for NCA estimation
   ####################################################
   
-  output$NCA <- renderPrint({
+  output$NCA <- renderDataTable({
     if(is.null(input$origfile) | is.null(origData))
       return()
-    if(ncol(newEntry)<2) return
+   #if(ncol(newEntry)<2) return
     else
     cvar <- c(input$IDvar, input$Xvar, input$Yvar, input$Day, 
                 input$TRTvar, input$Dose, input$Group)
     
-    
-    
       
     origData$DOSE <- as.numeric(as.character(origData$DOSE))
+    
     ncappc(obsFile = origData,  grNm = "DAY", grp =NULL,
            flNm = NULL, flag = NULL, doseNm = "DOSE", dose = NULL,
            concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",

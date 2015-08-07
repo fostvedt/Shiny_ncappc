@@ -25,7 +25,7 @@ shinyUI(navbarPage("NCA Explorer",
 tabPanel("Summary",
        uiOutput("AUC"),
        actionButton("NCAest", "Estimate NCA"),
-       verbatimTextOutput("NCA"),
+       dataTableOutput("NCA"),
       plotOutput("plot")
        )
       ) # close navbarPanel
