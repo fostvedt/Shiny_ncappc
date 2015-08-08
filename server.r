@@ -4,9 +4,6 @@ library(grid)
 source("PKhelpers.R")
 library(ncappc)
 
-#showing what a github contribution is
-# the script is changed now with this comment.
-
 shinyServer(function(input, output) {
   
   ####################################################
@@ -214,41 +211,13 @@ shinyServer(function(input, output) {
   ####################################################
   
   output$NCA <- renderDataTable({
-    if(is.null(input$origfile) | is.null(origData))
+    if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
-   #if(ncol(newEntry)<2) return
-    else
-    cvar <- c(input$IDvar, input$Xvar, input$Yvar, input$Day, 
-                input$TRTvar, input$Dose, input$Group)
+    else 
+    nca.est(newEntry())
+  })
     
-    # origData is the original uploaded dataset. This needs to be 
-    # changed to use the newEntry() data set creaeted by the user based on 
-    # the selections.
-    # Dose must be a integer or numeric variable
-    origData$DOSE <- as.numeric(as.character(origData$DOSE))
-    
-    # The newEntry() needs column names assigned to match the 
-    # arguments in the ncappc function. e.g. timeNmObs = "TIME"
-    # If the wrong columns are provided, then the function should not be called.
-    # So if nothing has been slected in input$Xvar (Time) or input$Yvar (Conc), 
-    # then no nca can be calculated.
-    #
-    # grNm can be any grouping variable (selections from input$Extra) e.g. Food
-    
-    ncappc(obsFile = origData,  grNm = "DAY", grp =NULL,
-           flNm = NULL, flag = NULL, doseNm = "DOSE", dose = NULL,
-           concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",
-           doseNormUnit = NULL, obsLog = "FALSE", idNmObs = "ID", timeNmObs = "TIME",
-           concNmObs = "CONC", AUCTimeRange = c(0,24), backExtrp = "TRUE",
-           LambdaTimeRange = NULL, LambdaExclude = NULL, doseAmtNm = "DOSE",
-           adminType = "extravascular", doseType = "ns", Tau = NULL, TI = NULL,
-           method = "mixed", timeFormat = "number",  
-           tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs",
-                      "Vz_obs", "Cl_obs", "HL_Lambda_z"), figFormat = "png",  noPlot = "TRUE",
-           printOut = "FALSE", studyName = "test")
-    ncaOutput
-})
-  
+
 #  output$NCA = renderPrint({  
 #    NCAd()
 #})
