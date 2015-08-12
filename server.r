@@ -2,6 +2,7 @@ library(shiny)
 library(ggplot2)
 library(grid)
 source("PKhelpers.R")
+source("NCAhelpers.R")
 library(ncappc)
 
 shinyServer(function(input, output) {
