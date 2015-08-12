@@ -173,7 +173,7 @@ shinyServer(function(input, output) {
     newLine2 <- newLine[which(newLine!= " ")]
     dat <- origData[,newLine2]
     
-    gnam <- paste("Group",1:length(input$Group))
+    gnam <- paste0("Group",1:length(input$Group))
     nam <- c("ID","Time","Conc","Day","Treatment","Dose",gnam)
     
     if(length(newLine2)<=1){ return(dat)}
@@ -210,6 +210,8 @@ shinyServer(function(input, output) {
   # code for NCA estimation
   ####################################################
   
+  # This calls nca.est in the NCAhelpers.r file
+  # This function does all the data checking
   output$NCA <- renderDataTable({
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
