@@ -1,6 +1,6 @@
 
 
-nca.choice <- function(data,pk=NULL,time=NULL,id=NULL,ds=NULL,trt=NULL,grp=NULL,auc=24){                       )
+nca.choice <- function(data,pk=NULL,time=NULL,id=NULL,ds=NULL,trt=NULL,grp=NULL,auc=24){
 ncappc(obsFile = data,  grNm = grp, gr =NULL,
        flNm = NULL, flag = NULL, doseNm = ds, dose = NULL,
        concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",
@@ -24,7 +24,7 @@ nca.est <- function(data){
   # c("ID","Time","Conc","Day","Treatment","Dose","gnam","Group 1")
   # If no ID is given, assume
   if(!is.null(data$Dose) & !is.numeric(data$Dose)){
-    data$Dose <- as.numeric(as.character(dataNCA$Dose))
+    data$Dose <- as.numeric(as.character(data$Dose))
   }
   
 
@@ -64,7 +64,7 @@ nca.est <- function(data){
      )))))))
 
   ncaOutput
-)
+}
 
 
 
