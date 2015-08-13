@@ -28,9 +28,9 @@ shinyServer(function(input, output) {
   # The options are the specific arguments for the
   # ncappc function. 
   output$Route <- renderUI({
-    if(is.null(input$origfile) | is.null(origData))
-      return()
-  radioButtons('route', 'Route of Administration',
+    if(is.null(input$origfile))
+      return() 
+  radioButtons("route", "Route of Administration",
                c("extravascular","iv-bolus","iv-infusion")
   )
   })
@@ -39,9 +39,9 @@ shinyServer(function(input, output) {
   # are "ns" non-steady state
   # and "ss" for steady state.
   output$DoseSchedule <- renderUI({
-    if(is.null(input$origfile) | is.null(origData))
-      return()
-    radioButtons('Sched', 'Dosing',
+    if(is.null(input$origfile))
+      return() 
+    radioButtons("Sched", "Dosing",
                  c("Steady State", "Non-Steady State")
     )
   })
