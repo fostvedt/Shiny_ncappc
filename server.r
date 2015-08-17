@@ -1,9 +1,11 @@
 library(shiny)
+library(devtools)
 library(ggplot2)
 library(grid)
+install_github("cacha0227/ncappc")
 source("PKhelpers.R")
 source("NCAhelpers.R")
-library(ncappc)
+
 
 shinyServer(function(input, output) {
   
@@ -32,7 +34,7 @@ shinyServer(function(input, output) {
       return() 
   radioButtons("route", "Route of Administration",
                c("extravascular","iv-bolus","iv-infusion")
-  )
+              )
   })
   
   # This affects the NCA. The options in the ncappc function
@@ -42,7 +44,7 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile))
       return() 
     radioButtons("Sched", "Dosing",
-                 c("Steady State", "Non-Steady State")
+                 c("Non-Steady State","Steady State")
     )
   })
   
