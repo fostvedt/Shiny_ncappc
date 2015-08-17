@@ -5,7 +5,7 @@ library(grid)
 install_github("cacha0227/ncappc")
 source("PKhelpers.R")
 source("NCAhelpers.R")
-
+#library(ncappc)
 
 shinyServer(function(input, output) {
   
