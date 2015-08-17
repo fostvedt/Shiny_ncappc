@@ -47,19 +47,19 @@ nca.est <- function(data){
   
   # If ID, conc, time, dose, treatment, and extra defined  
   ifelse(ct, #If conc and time defined 
-          nca.choice(data,pk="Conc",time="Time",auc=24),
+         ncaOutput <- nca.choice(data,pk="Conc",time="Time",auc=24),
     ifelse(ctd, # If conc, time, and dose defined 
-          nca.choice(data,pk="Conc",time="Time",ds="Dose",auc=24),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",ds="Dose",auc=24),
     ifelse(cti, # If ID, time, and conc defined
-          nca.choice(data,pk="Conc",time="Time",id="ID",auc=24),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",auc=24),
     ifelse(ctid, # If ID, conc, time, and dose defined 
-           nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",auc=24),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",auc=24),
     ifelse(ctidt, # If ID, conc, time, dose, and treatment defined
-           nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",trt="Treatment",auc=24),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",trt="Treatment",auc=24),
     ifelse(ctide,  # If ID, conc, time, dose, and extra defined  
-           nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",grp="Group 1",auc=24),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",grp="Group 1",auc=24),
     ifelse(ctidte, # If ID, conc, time, dose, treatment, and extra defined 
-           nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",trt="Treatment",grp="Group 1",auc=24),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",trt="Treatment",grp="Group 1",auc=24),
     ncaOutput <- NULL #returning nothing if one of the above is not satisfied
      )))))))
 
