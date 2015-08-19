@@ -1,4 +1,5 @@
 library(shiny)
+library(DT)
 library(devtools)
 library(ggplot2)
 library(grid)
@@ -26,28 +27,7 @@ shinyServer(function(input, output) {
   })
 
   
-  # This affects the NCA estimation
-  # The options are the specific arguments for the
-  # ncappc function. 
-  output$Route <- renderUI({
-    if(is.null(input$origfile))
-      return() 
-  radioButtons("route", "Route of Administration",
-               c("extravascular","iv-bolus","iv-infusion")
-              )
-  })
-  
-  # This affects the NCA. The options in the ncappc function
-  # are "ns" non-steady state
-  # and "ss" for steady state.
-  output$DoseSchedule <- renderUI({
-    if(is.null(input$origfile))
-      return() 
-    radioButtons("Sched", "Dosing",
-                 c("Non-Steady State","Steady State")
-    )
-  })
-  
+ 
   # Time Variable
   # This UI selects the Time variable. Usually this will
   # be on the x-axis for a PK-conc plot
@@ -198,6 +178,29 @@ shinyServer(function(input, output) {
   ####################################################
   # code for NCA estimation tab
   ####################################################
+  
+  # This affects the NCA estimation
+  # The options are the specific arguments for the
+  # ncappc function. 
+  output$Route <- renderUI({
+    if(is.null(input$origfile))
+      return() 
+    radioButtons("route", "Route of Administration",
+                 c("extravascular","iv-bolus","iv-infusion")
+    )
+  })
+  
+  # This affects the NCA. The options in the ncappc function
+  # are "ns" non-steady state
+  # and "ss" for steady state.
+  output$DoseSchedule <- renderUI({
+    if(is.null(input$origfile))
+      return() 
+    radioButtons("Sched", "Dosing",
+                 c("Non-Steady State","Steady State")
+    )
+  })
+  
   
   # The function requires an AUC time interval
   # The default is (0,24)
