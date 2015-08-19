@@ -4,8 +4,6 @@ shinyUI(navbarPage("NCA Explorer",
 #  h4("Non-Compartmental Analysis using the ncappc library"),
   sidebarPanel(width = 3,
     uiOutput("read_Origfile"),
-    uiOutput("Route"),
-    uiOutput("DoseSchedule"),
     uiOutput("choose_Xvar"),
     uiOutput("choose_Yvar"),
     uiOutput("choose_IDvar"),
@@ -24,9 +22,11 @@ shinyUI(navbarPage("NCA Explorer",
 
 tabPanel("Summary",
        uiOutput("AUC"),
+       uiOutput("Route"),
+       uiOutput("DoseSchedule"),
        actionButton("NCAest", "Estimate NCA"),
        dataTableOutput("NCA"),
-      plotOutput("plot")
+       plotOutput("plot")
        )
       ) # close navbarPanel
   ) #close UI
