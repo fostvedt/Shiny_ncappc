@@ -20,14 +20,20 @@ shinyUI(navbarPage("NCA Explorer",
     )
 ),
 
-tabPanel("Summary",
-       uiOutput("AUC"),
-       uiOutput("Route"),
-       uiOutput("DoseSchedule"),
-       actionButton("NCAest", "Estimate NCA"),
-       dataTableOutput("NCA"),
-       plotOutput("plot")
-       )
+tabPanel("Estimate NCA",
+       fluidRow(
+       column(3,uiOutput("AUC")),
+       column(3,uiOutput("Route")),
+       column(3,uiOutput("DoseSchedule")),
+       column(3,actionButton("NCAest", "Estimate NCA"))
+       ),
+       dataTableOutput("NCA")#,
+       #plotOutput("plot")
+       ),
+tabPanel("Plots",
+         plotOutput("plot")
+)
+
       ) # close navbarPanel
   ) #close UI
 
