@@ -2,23 +2,25 @@ shinyUI(navbarPage("NCA Explorer",
   tabPanel("Input Data",
            
 #  h4("Non-Compartmental Analysis using the ncappc library"),
-  sidebarPanel(width = 3,
+fluidRow(column(width = 3,
     uiOutput("read_Origfile"),
+    uiOutput("choose_IDvar"),
     uiOutput("choose_Xvar"),
     uiOutput("choose_Yvar"),
-    uiOutput("choose_IDvar"),
-    uiOutput("choose_TRT"),
-    uiOutput("choose_DOSE"),
-    uiOutput("choose_DAY"),
-    uiOutput("choose_extra"),
-    br()),
-  
-  mainPanel(width = 9,
-    h4("Summary Statistics and Plot"), 
+    uiOutput("choose_DOSE")), 
+    column(width=3, 
+           uiOutput("choose_TRT"),
+           uiOutput("choose_extra"),
+           uiOutput("choose_DAY")),
+    column(width=3, 
+    uiOutput("choose_DUR")),
+    
+    mainPanel(width = 12,
+    h4("Raw Data and Summary Statistics"), 
        dataTableOutput("Data"),
        verbatimTextOutput("summary")
     )
-),
+)),
 
 tabPanel("Estimate NCA",
        fluidRow(

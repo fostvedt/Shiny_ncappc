@@ -113,7 +113,7 @@ shinyServer(function(input, output) {
     selectInput("Day", "Choose Day", choices = choice.temp )
   })
   
-  
+   
   # Extra Stratification variables
   # e.g. fed/fasted
   # must be selected from the variables uplaoded
@@ -130,6 +130,17 @@ shinyServer(function(input, output) {
                 multiple=T,options = list(maxItems = 3) )
   })
 
+  output$choose_DUR <- renderUI({
+    if(is.null(input$origfile))
+      return()
+    if(is.null(input$origfile) | is.null(origData))
+    { choice.temp<-c(" "," ")
+    } else
+    { choice.temp<-c(" ",colnames(origData))
+    }    
+    selectInput("DUR", "Choose Duration", choices = choice.temp )
+  })
+  
   # This is outputted so that the user can see
   # what data they have available to choose from when 
   #selecting the variables for the estimation
@@ -152,12 +163,13 @@ shinyServer(function(input, output) {
                  Day = input$Day,
                  Treatment = input$TRTvar,
                  Dose = input$Dose,
+                 Duration = input$DUR,
                  Group = input$Group)
     newLine2 <- newLine[which(newLine!= " ")]
     dat <- origData[,newLine2]
     
     gnam <- paste0("Group",1:length(input$Group))
-    nam <- c("ID","Time","Conc","Day","Treatment","Dose",gnam)
+    nam <- c("ID","Time","Conc","Day","Treatment","Dose", "DUR", gnam)
     
     if(length(newLine2)<=1){ return(dat)}
     else{
