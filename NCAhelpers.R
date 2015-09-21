@@ -1,8 +1,11 @@
 
 
-nca.choice <- function(data,pk=NULL,time=NULL,id=NULL,ds=NULL,trt=NULL,grp=NULL,auc=24, route=NULL, dur=NULL){
-ncappc(obsFile = data,  grNm = grp, gr =NULL,
-       flNm = NULL, flag = NULL, doseNm = ds, dose = NULL,
+nca.choice <- function(data,pk=NULL,time=NULL,id=NULL,ds=NULL,trt=NULL,grp=NULL,auc=24,route=RouAd,dur=NULL){
+  
+ncappc(obsFile = data,  
+       #grNm = grp, gr =NULL,
+       #flNm = NULL, flag = NULL, 
+       doseNm = ds, dose = NULL,
        concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",
        doseNormUnit = NULL, obsLog = "FALSE", idNmObs = id, timeNmObs = time,
        concNmObs = pk, AUCTimeRange = c(0,auc), backExtrp = "TRUE",
@@ -18,7 +21,7 @@ return(ncaOutput)
 
 
 
-nca.est <- function(data){
+nca.est <- function(data,AUCmax,RouAd){
 
   # column names for the newEntry() dataframe are 
   # c("ID","Time","Conc","Day","Treatment","Dose","gnam","Group 1")
@@ -29,8 +32,8 @@ nca.est <- function(data){
   if(!is.null(data$DUR) & !is.numeric(data$DUR)){
     data$DUR <- as.numeric(as.character(data$DUR))
   }
-  
-  
+  AUCmax <- as.numeric(AUCmax)
+  RouAd <- as.character(RouAd)
 
   a1 <- !is.null(data$Conc)
   a2 <- !is.null(data$Time)
@@ -55,21 +58,21 @@ nca.est <- function(data){
   
   # If ID, conc, time, dose, treatment, and extra defined  
   ifelse(ct, #If conc and time defined 
-         ncaOutput <- nca.choice(data,pk="Conc",time="Time",auc=24, route="extravascular"),
+         ncaOutput <- nca.choice(data,pk="Conc",time="Time",auc=AUCmax,route=RouAd),
     ifelse(ctd, # If conc, time, and dose defined 
-           ncaOutput <- nca.choice(data,pk="Conc",time="Time",ds="Dose",auc=24, route="extravascular"),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",ds="Dose",auc=AUCmax,route=RouAd),
     ifelse(cti, # If ID, time, and conc defined
-           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",auc=24, route="extravascular"),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",auc=AUCmax,route=RouAd),
     ifelse(ctid, # If ID, conc, time, and dose defined 
-           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",auc=24, route="extravascular"),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",auc=AUCmax,route=RouAd),
     ifelse(ctidt, # If ID, conc, time, dose, and treatment defined
-           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",trt="Treatment",auc=24, route="extravascular"),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",trt="Treatment",auc=AUCmax,route=RouAd),
     ifelse(ctide,  # If ID, conc, time, dose, and extra defined  
-           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",grp="Group 1",auc=24, route="extravascular"),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",grp="Group 1",auc=AUCmax,route=RouAd),
     ifelse(ctidte, # If ID, conc, time, dose, treatment, and extra defined 
-           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",trt="Treatment",grp="Group 1",auc=24, route="extravascular"),
+           ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",trt="Treatment",grp="Group 1",auc=AUCmax,route=RouAd),
            ifelse(ctidtef, # If ID, conc, time, dose, treatment, and extra defined 
-                  ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",trt="Treatment",grp="Group 1",auc=24, route="iv-infusion", dur="DUR"),
+                  ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",trt="Treatment",grp="Group 1",auc=AUCmax,route=RouAd),
     ncaOutput <- NULL #returning nothing if one of the above is not satisfied
      ))))))))
 
