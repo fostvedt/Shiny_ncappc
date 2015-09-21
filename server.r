@@ -215,6 +215,13 @@ shinyServer(function(input, output) {
     )
   })
   
+  output$EstMeth <- renderUI({
+    if(is.null(input$origfile))
+      return() 
+    radioButtons("method", "Estimation Method",
+                 c("mixed","linear","log-linear"))
+  })
+  
   
   # The function requires an AUC time interval
   # The default is (0,24)
@@ -237,7 +244,7 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
     else 
-    nca.est(newEntry(), input$AUCmax,input$route)
+    nca.est(newEntry(), input$AUCmax,input$route,input$method)
   })
     
   output$NCA <- renderDataTable({
