@@ -233,6 +233,13 @@ shinyServer(function(input, output) {
   })
   
   
+  output$dosefreq <- renderUI({
+    if(is.null(input$origfile) | is.null(origData))
+      return() 
+    numericInput("dfreq", "Dosing Frequency (hours)",
+                value=1,min=0,max=168)
+  })
+  
   
   
   ####################################################
@@ -245,7 +252,7 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
     else 
-    nca.est(newEntry(), input$AUCmax,input$route,input$method, input$Sched)
+    nca.est(newEntry(), input$AUCmax,input$route,input$method, input$Sched,input$dfreq)
   })
     
   output$NCA <- renderDataTable({
