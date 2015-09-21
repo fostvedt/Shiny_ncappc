@@ -29,7 +29,9 @@ tabPanel("Estimate NCA",
        column(3,uiOutput("DoseSchedule")),
        column(3,actionButton("NCAest", "Estimate NCA"))
        ),
-       dataTableOutput("NCA")#,
+       downloadButton("downloadNCA","Download NCA Estimates"),
+       dataTableOutput("NCA"),#,
+       dataTableOutput("testtable")
        #plotOutput("plot")
        ),
 tabPanel("Plots",
