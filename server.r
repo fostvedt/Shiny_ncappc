@@ -225,13 +225,14 @@ shinyServer(function(input, output) {
   
   # The function requires an AUC time interval
   # The default is (0,24)
+  # The output is not returned though :/ from ncappc
   
   output$AUC <- renderUI({
-    selectInput("AUCmax", "select AUC interval: (0,Selection)",
-                choices=c(8,12,24,48,72,Inf),selected=24)
+    sliderInput("AUCmax", "select AUC interval",
+                min=0,max=150,value=c(0,24))
   })
-
- 
+  
+  
   
   
   ####################################################
@@ -244,7 +245,7 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
     else 
-    nca.est(newEntry(), input$AUCmax,input$route,input$method)
+    nca.est(newEntry(), input$AUCmax,input$route,input$method, input$Sched)
   })
     
   output$NCA <- renderDataTable({
