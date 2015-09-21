@@ -26,13 +26,12 @@ tabPanel("Estimate NCA",
        fluidRow(
        column(3,uiOutput("Route"),
          uiOutput("DoseSchedule")),
-       column(3,uiOutput("EstMeth")),
+       column(3,uiOutput("dosefreq"),
+              uiOutput("EstMeth")),
        column(3,uiOutput("AUC"))
        ),
        downloadButton("downloadNCA","Download NCA Estimates"),
-       dataTableOutput("NCA"),#,
-       dataTableOutput("testtable")
-       #plotOutput("plot")
+       dataTableOutput("NCA")
        ),
 tabPanel("Plots",
          plotOutput("plot")
