@@ -187,6 +187,8 @@ shinyServer(function(input, output) {
      #else  head(origData)
     else head(newEntry())
     })
+  
+  
   ####################################################
   # code for NCA estimation tab
   ####################################################
@@ -221,7 +223,8 @@ shinyServer(function(input, output) {
     selectInput("AUCmax", "select AUC interval: (0,Selection)",
                 choices=c(8,12,24,48,72,Inf),selected=24)
   })
-  
+
+ 
   
   
   ####################################################
@@ -230,18 +233,31 @@ shinyServer(function(input, output) {
   
   # This calls nca.est in the NCAhelpers.r file
   # This function does all the data checking
+  NCAestimates <- reactive({
+    if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
+      return()
+    else 
+    nca.est(newEntry(), input$AUCmax,input$route)
+  })
+    
   output$NCA <- renderDataTable({
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
     else 
-    nca.est(newEntry())
+      NCAestimates()
   })
-    
+  
 
 #  output$NCA = renderPrint({  
 #    NCAd()
 #})
   
+  output$downloadNCA <- downloadHandler(
+    filename = function() {paste0("NCAest", '.csv')},
+    content  = function(file){
+      write.csv(NCAestimates(),file)
+    }
+  )
   
   
   ####################################################
