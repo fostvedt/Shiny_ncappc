@@ -24,10 +24,10 @@ fluidRow(column(width = 3,
 
 tabPanel("Estimate NCA",
        fluidRow(
-       column(3,uiOutput("Route")),
-       column(3,uiOutput("DoseSchedule")),
+       column(3,uiOutput("Route"),
+         uiOutput("DoseSchedule")),
        column(3,uiOutput("EstMeth")),
-       column(3,actionButton("NCAest", "Estimate NCA"))
+       column(3,uiOutput("AUC"))
        ),
        downloadButton("downloadNCA","Download NCA Estimates"),
        dataTableOutput("NCA"),#,
