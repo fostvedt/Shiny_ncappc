@@ -151,7 +151,6 @@ shinyServer(function(input, output) {
     newLine <- c(ID=input$IDvar, 
                  Time = input$Xvar,
                  Conc = input$Yvar,
-                 Day = input$Day,
                  Treatment = input$TRTvar,
                  AMT = input$AMT,
                  Group = input$Group)
@@ -159,7 +158,7 @@ shinyServer(function(input, output) {
     dat <- origData[,newLine2]
     
     gnam <- paste0("Group",1:length(input$Group))
-    nam <- c("ID","Time","Conc","Day","Treatment","AMT", gnam)
+    nam <- c("ID","Time","Conc","Treatment","AMT", gnam)
     
     if(length(newLine2)<=1){ return()}
     else{
