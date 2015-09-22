@@ -2,7 +2,7 @@
 
 nca.choice <- function(data,pk=NULL,time=NULL,id=NULL,ds=NULL,trt=NULL,
                   grp=NULL,dtype=NULL,bE="TRUE",auc=c(0,24),route=RouAd,method="mixed",
-                  tau=tau){
+                  tau=tau,dur=dur){
   
 ncappc(obsFile = data,  
        #grNm = grp, gr =NULL,
@@ -12,7 +12,7 @@ ncappc(obsFile = data,
        doseNormUnit = NULL, obsLog = "FALSE", idNmObs = id, timeNmObs = time,
        concNmObs = pk, AUCTimeRange = auc, backExtrp = bE,
        LambdaTimeRange = NULL, LambdaExclude = NULL, doseAmtNm = ds,
-       adminType = route, doseType = dtype, Tau = tau, TI = NULL,
+       adminType = route, doseType = dtype, Tau = tau, TI = dur,
        method = method, timeFormat = "number",  
        tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs",
                   "Vz_obs", "Cl_obs", "HL_Lambda_z"), figFormat = "png",  noPlot = "TRUE",
@@ -23,7 +23,7 @@ return(ncaOutput)
 
 
 
-nca.est <- function(data,AUCmax,RouAd,method,NSS,tau){
+nca.est <- function(data,AUCmax,RouAd,method,NSS,tau,dur){
 
   # column names for the newEntry() dataframe are 
   # c("ID","Time","Conc","Day","Treatment","Dose","gnam","Group 1")
@@ -36,6 +36,7 @@ nca.est <- function(data,AUCmax,RouAd,method,NSS,tau){
   }
   AUCmax <- as.numeric(AUCmax) 
   tau <- as.numeric(tau)
+  dur <- as.numeric(dur)
   RouAd  <- as.character(RouAd)
   method <- as.character(method) 
   NSS <- as.character(NSS)
@@ -70,39 +71,39 @@ nca.est <- function(data,AUCmax,RouAd,method,NSS,tau){
   # If ID, conc, time, dose, treatment, and extra defined  
   ifelse(ct, #If conc and time defined 
          ncaOutput <- nca.choice(data,pk="Conc",time="Time",auc=AUCmax,route=RouAd, 
-                                 method=method,dtype=dtype,bE=bE,tau=tau),
+                                 method=method,dtype=dtype,bE=bE,tau=tau,dur=dur),
          
     ifelse(ctd, # If conc, time, and dose defined 
            ncaOutput <- nca.choice(data,pk="Conc",time="Time",ds="Dose",auc=AUCmax,
-                           route=RouAd, method=method,dtype=dtype,bE=bE,tau=tau),
+                           route=RouAd, method=method,dtype=dtype,bE=bE,tau=tau,dur=dur),
            
     ifelse(cti, # If ID, time, and conc defined
            ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",auc=AUCmax,
-                           route=RouAd, method=method,dtype=dtype,bE=bE,tau=tau),
+                           route=RouAd, method=method,dtype=dtype,bE=bE,tau=tau,dur=dur),
            
     ifelse(ctid, # If ID, conc, time, and dose defined 
            ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",
-                           auc=AUCmax,route=RouAd, method=method,dtype=dtype,bE=bE,tau=tau),
+                           auc=AUCmax,route=RouAd, method=method,dtype=dtype,bE=bE,tau=tau,dur=dur),
            
     ifelse(ctidt, # If ID, conc, time, dose, and treatment defined
            ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",
                           trt="Treatment",auc=AUCmax,route=RouAd, method=method,
-                          dtype=dtype,bE=bE,tau=tau),
+                          dtype=dtype,bE=bE,tau=tau,dur=dur),
            
     ifelse(ctide,  # If ID, conc, time, dose, and extra defined  
            ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",
                           grp="Group 1",auc=AUCmax,route=RouAd, method=method,
-                          dtype=dtype,bE=bE,tau=tau),
+                          dtype=dtype,bE=bE,tau=tau,dur=dur),
            
     ifelse(ctidte, # If ID, conc, time, dose, treatment, and extra defined 
            ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",ds="Dose",
                           trt="Treatment",grp="Group 1",auc=AUCmax,route=RouAd, 
-                          method=method,dtype=dtype,bE=bE,tau=tau),
+                          method=method,dtype=dtype,bE=bE,tau=tau,dur=dur),
            
            ifelse(ctidtef, # If ID, conc, time, dose, treatment, and extra defined 
                   ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",
                           ds="Dose",trt="Treatment",grp="Group 1",auc=AUCmax,route=RouAd, 
-                          method=method,dtype=dtype,bE=bE,tau=tau),
+                          method=method,dtype=dtype,bE=bE,tau=tau,dur=dur),
                   
     ncaOutput <- NULL #returning nothing if one of the above is not satisfied
      ))))))))
