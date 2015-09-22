@@ -12,9 +12,7 @@ fluidRow(column(width = 3,
            uiOutput("choose_TRT"),
            uiOutput("choose_extra"),
            uiOutput("choose_DAY")),
-    column(width=3, 
-    uiOutput("choose_DUR")),
-    
+
     mainPanel(width = 12,
     h4("Raw Data and Summary Statistics"), 
        dataTableOutput("Data"),
@@ -25,10 +23,11 @@ fluidRow(column(width = 3,
 tabPanel("Estimate NCA",
        fluidRow(
        column(3,uiOutput("Route"),
-         uiOutput("DoseSchedule")),
-       column(3,uiOutput("dosefreq"),
-              uiOutput("EstMeth")),
-       column(3,uiOutput("AUC"))
+              uiOutput("choose_DUR")),
+       column(3, uiOutput("DoseSchedule"),
+              uiOutput("dosefreq")),
+       column(3,uiOutput("AUC"),
+              uiOutput("EstMeth"))
        ),
        downloadButton("downloadNCA","Download NCA Estimates"),
        dataTableOutput("NCA")
