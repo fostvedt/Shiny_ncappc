@@ -130,16 +130,7 @@ shinyServer(function(input, output) {
                 multiple=T,options = list(maxItems = 3) )
   })
 
-  output$choose_DUR <- renderUI({
-    if(is.null(input$origfile))
-      return()
-    if(is.null(input$origfile) | is.null(origData))
-    { choice.temp<-c(" "," ")
-    } else
-    { choice.temp<-c(" ",colnames(origData))
-    }    
-    selectInput("DUR", "Choose Duration", choices = choice.temp )
-  })
+ 
   
   # This is outputted so that the user can see
   # what data they have available to choose from when 
@@ -163,13 +154,12 @@ shinyServer(function(input, output) {
                  Day = input$Day,
                  Treatment = input$TRTvar,
                  Dose = input$Dose,
-                 Duration = input$DUR,
                  Group = input$Group)
     newLine2 <- newLine[which(newLine!= " ")]
     dat <- origData[,newLine2]
     
     gnam <- paste0("Group",1:length(input$Group))
-    nam <- c("ID","Time","Conc","Day","Treatment","Dose", "DUR", gnam)
+    nam <- c("ID","Time","Conc","Day","Treatment","Dose", gnam)
     
     if(length(newLine2)<=1){ return(dat)}
     else{
@@ -203,6 +193,14 @@ shinyServer(function(input, output) {
                  c("extravascular","iv-bolus","iv-infusion")
     )
   })
+  
+  output$choose_DUR <- renderUI({
+    if(is.null(input$origfile) | is.null(origData))
+    return()
+    
+    numericInput("DUR", "Duration of Infusion (hours)", min=0,max=12,value=1)
+  })
+  
   
   # This affects the NCA. The options in the ncappc function
   # are "ns" non-steady state
@@ -252,7 +250,7 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
     else 
-    nca.est(newEntry(), input$AUCmax,input$route,input$method, input$Sched,input$dfreq)
+    nca.est(newEntry(), input$AUCmax,input$route,input$method, input$Sched,input$dfreq,input$DUR)
   })
     
   output$NCA <- renderDataTable({
