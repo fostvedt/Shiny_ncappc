@@ -1,5 +1,5 @@
 library(shiny)
-library(DT)
+#library(DT)
 library(devtools)
 library(ggplot2)
 library(grid)
@@ -99,7 +99,7 @@ shinyServer(function(input, output) {
     } else
     { choice.temp<-c(" ",colnames(origData))
     }    
-    selectInput("Dose", "Choose Dose", choices = choice.temp )
+    selectInput("AMT", "Choose Dose", choices = choice.temp )
   })
   
   output$choose_DAY <- renderUI({
@@ -153,15 +153,15 @@ shinyServer(function(input, output) {
                  Conc = input$Yvar,
                  Day = input$Day,
                  Treatment = input$TRTvar,
-                 Dose = input$Dose,
+                 AMT = input$AMT,
                  Group = input$Group)
     newLine2 <- newLine[which(newLine!= " ")]
     dat <- origData[,newLine2]
     
     gnam <- paste0("Group",1:length(input$Group))
-    nam <- c("ID","Time","Conc","Day","Treatment","Dose", gnam)
+    nam <- c("ID","Time","Conc","Day","Treatment","AMT", gnam)
     
-    if(length(newLine2)<=1){ return(dat)}
+    if(length(newLine2)<=1){ return()}
     else{
     colnames(dat) <- nam[which(newLine!= " ")]
     return(dat)
@@ -209,9 +209,7 @@ shinyServer(function(input, output) {
   output$DoseSchedule <- renderUI({
     if(is.null(input$origfile))
       return() 
-    radioButtons("Sched", "Dosing",
-                 c("Non-Steady State","Steady State")
-    )
+    radioButtons("Sched", "Dosing", c("Non-Steady State","Steady State"))
   })
   
   output$EstMeth <- renderUI({
@@ -236,7 +234,7 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile) | is.null(origData))
       return() 
     numericInput("dfreq", "Dosing Frequency (hours)",
-                value=1,min=0,max=168)
+                value=24,min=0,max=168)
   })
   
   
@@ -298,10 +296,10 @@ shinyServer(function(input, output) {
       return()
     else if(input$IDvar==" " & input$TRTvar== " ")  
       XYplot.orig(origData,input$Xvar,input$Yvar)
-    else if(input$Dose==" ")
+    else if(input$AMT==" ")
       PK.ID.orig(origData,input$Xvar,input$Yvar,input$IDvar)  
     else
-      NCA.PPC.SINGLE(origData,input$Xvar,input$Yvar,input$IDvar,input$Dose)   
+      NCA.PPC.SINGLE(origData,input$Xvar,input$Yvar,input$IDvar,input$AMT)   
   }) #closing render table
   
 })
