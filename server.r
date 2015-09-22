@@ -174,6 +174,7 @@ shinyServer(function(input, output) {
   output$Data <-  renderDataTable({ 
     if(is.null(input$origfile) | is.null(origData))
      return()
+    if( is.null(newEntry()) | is.vector(newEntry())) return()
      #else  head(origData)
     else head(newEntry())
     })
