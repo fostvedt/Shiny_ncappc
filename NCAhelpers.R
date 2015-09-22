@@ -23,7 +23,7 @@ return(ncaOutput)
 
 
 
-nca.est <- function(data,AUCmax,RouAd,method,NSS,tau,dur){
+nca.est <- function(data,AUCmax,RouAd,method,NSS,tau,dur=0){
 
   # column names for the newEntry() dataframe are 
   # c("ID","Time","Conc","Day","Treatment","Dose","gnam","Group 1")
@@ -54,18 +54,18 @@ nca.est <- function(data,AUCmax,RouAd,method,NSS,tau,dur){
   a4 <- !is.null(data$Treatment)
   a5 <- !is.null(data$ID)
   a6 <- !is.null(data$Group1)
-  a7 <- !is.null(data$DUR)
+#  a7 <- !is.null(data$DUR)
   
 
   # creating boolean decisions to detect columns in dataset
-  ct <- a1 & a2 & !a3 & !a4 & !a5 & !a6   # If conc and time defined 
-  ctd <- a1 & a2 & a3 & !a4 & !a5 & !a6  # If conc, time, and dose defined 
+  ct <- a1 & a2 & !a3 & !a4 & !a5 & !a6 # If conc and time defined 
+  ctd <- a1 & a2 & a3 & !a4 & !a5 & !a6 # If conc, time, and dose defined 
   cti <- a1 & a2 & !a3 & !a4 & a5 & !a6 # If ID, time, and conc defined
   ctid <- a1 & a2 & a3 & !a4 & a5 & !a6 # If ID, conc, time, and dose defined  
   ctidt <- a1 & a2 & a3 & a4 & a5 & !a6 # If ID, conc, time, dose, and treatment defined  
   ctide <- a1 & a2 & a3 & !a4 & a5 & a6 # If ID, conc, time, dose, and extra defined  
   ctidte <- a1 & a2 & a3 & a4 & a5 & a6 # If ID, conc, time, dose, treatment, and extra defined 
-  ctidtef <- a1 & a2 & a3 & a4 & a5 & a6 &a7 # If ID, conc, time, dose, treatment, dur and extra defined  
+  #ctidtef <- a1 & a2 & a3 & a4 & a5 & a6 &a7 # If ID, conc, time, dose, treatment, dur and extra defined  
   
   
   
@@ -101,13 +101,13 @@ nca.est <- function(data,AUCmax,RouAd,method,NSS,tau,dur){
                           trt="Treatment",grp="Group 1",auc=AUCmax,route=RouAd, 
                           method=method,dtype=dtype,bE=bE,tau=tau,dur=dur),
            
-           ifelse(ctidtef, # If ID, conc, time, dose, treatment, and extra defined 
-                  ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",
-                          ds="AMT",trt="Treatment",grp="Group 1",auc=AUCmax,route=RouAd, 
-                          method=method,dtype=dtype,bE=bE,tau=tau,dur=dur),
+   #        ifelse(ctidtef, # If ID, conc, time, dose, treatment, and extra defined 
+    #              ncaOutput <- nca.choice(data,pk="Conc",time="Time",id="ID",
+     #                     ds="AMT",trt="Treatment",grp="Group 1",auc=AUCmax,route=RouAd, 
+      #                    method=method,dtype=dtype,bE=bE,tau=tau,dur=dur),
                   
     ncaOutput <- NULL #returning nothing if one of the above is not satisfied
-     ))))))))
+     )))))))
 
   ncaOutput
 }
