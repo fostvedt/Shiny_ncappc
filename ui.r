@@ -3,6 +3,8 @@ shinyUI(navbarPage("NCA Explorer",
            
 #  h4("Non-Compartmental Analysis using the ncappc library"),
 fluidRow(column(width = 3,
+    helpText( a("ncappc package documentation",
+                            target="_blank",href="https://cran.rstudio.com/web/packages/ncappc/vignettes/ncappc-vignette.html")),
     uiOutput("read_Origfile"),
     uiOutput("choose_IDvar")),
     column(width=3,
@@ -14,7 +16,6 @@ fluidRow(column(width = 3,
            uiOutput("choose_extra")),
 
     mainPanel(width = 12,
-    h5(""),
     h4("Raw Data and Summary Statistics"), 
        dataTableOutput("Data"),
        verbatimTextOutput("summary")
