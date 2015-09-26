@@ -1,7 +1,10 @@
 shinyUI(navbarPage("NCA Explorer",
   tabPanel("Input Data",
  #want another commit          
-#  h4("Non-Compartmental Analysis using the ncappc library"),
+  h6("The App performs Non-Compartmental Analysis with the ncappc R library.
+     The program is relient on free, open-source software and libraries that are made 
+      available without warranty. No strenuous validation of this App has been conducted. 
+      The code is available on github at www.github.com/fostvedt/shiny_ncappc."),
 fluidRow(column(width = 3,
     helpText( a("ncappc package documentation",
                             target="_blank",href="https://cran.rstudio.com/web/packages/ncappc/vignettes/ncappc-vignette.html")),
