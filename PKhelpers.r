@@ -36,9 +36,9 @@ PK.TRT.orig<-function(orig.data,X.name,Y.name,ID.name,TRT)
   ID.t<-orig.data[,ID.name]
   trt <- orig.data[,TRT]
   new.data<-data.frame(X.t=X.t,Y.t=Y.t,ID.t=ID.t,trt=trt)
-  ggplot( data=new.data, aes(x=X.t,y=Y.t,group=trt))+
+  ggplot( data=new.data, aes(x=X.t,y=Y.t,group=c(ID.t)))+
     geom_point()+geom_line()+labs(x=X.name,y=Y.name)+ scale_y_log10()+
-    facet_wrap(~ID.t)
+    facet_wrap(~trt)
 }   
 
 
