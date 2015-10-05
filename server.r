@@ -251,13 +251,19 @@ shinyServer(function(input, output) {
     nca.est(newEntry(), input$AUCmax,input$route,input$method, input$Sched,input$dfreq,input$DUR)
   })
     
-  output$NCA <- renderDataTable({
+  output$NCAval <- renderDataTable({
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
     else 
-      NCAestimates()
+      NCAestimates()[[1]]
   })
   
+  output$NCAstat <- renderDataTable({
+    if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
+      return()
+    else 
+      NCAestimates()[[2]]
+  })
 
 #  output$NCA = renderPrint({  
 #    NCAd()
@@ -266,7 +272,14 @@ shinyServer(function(input, output) {
   output$downloadNCA <- downloadHandler(
     filename = function() {paste0("NCAest", '.csv')},
     content  = function(file){
-      write.csv(NCAestimates(),file)
+      write.csv(NCAestimates()[[1]],file)
+    }
+  )
+  
+  output$downloadNCAstat <- downloadHandler(
+    filename = function() {paste0("NCAest", '.csv')},
+    content  = function(file){
+      write.csv(NCAestimates()[[2]],file)
     }
   )
   

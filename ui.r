@@ -34,9 +34,14 @@ tabPanel("Estimate NCA",
        column(3,uiOutput("AUC"),
               uiOutput("EstMeth"))
        ),
+       h3("Table of NCA estimates"),
        h6("The download feature will not work if run through RStudio. Please open in your browser."),
        downloadButton("downloadNCA","Download NCA Estimates"),
-       dataTableOutput("NCA")
+       dataTableOutput("NCAval"),
+       h3("Table of Statistics for the NCA estimates"),
+       downloadButton("downloadNCAstat","Download NCA Summary Statistics
+                      "),
+       dataTableOutput("NCAstat")
        ),
 tabPanel("Plots",
          plotOutput("plot")

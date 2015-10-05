@@ -20,7 +20,7 @@ ncappc(obsFile = data,
        tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs",
                   "Vz_obs", "Cl_obs", "HL_Lambda_z"), figFormat = "png",  noPlot = "TRUE",
        printOut = "FALSE", studyName = "test")
-return(ncaOutput)
+return(list(ncaOutput,ObsStat))
 }
 
 
