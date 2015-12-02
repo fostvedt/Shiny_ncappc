@@ -4,21 +4,19 @@
 # This function is called in the next defined function below. 
 ################
 nca.choice <- function(data,pk=NULL,time=NULL,id=NULL,ds=NULL,trt=NULL,
-                  grp=NULL,dtype=NULL,bE="TRUE",auc=c(0,24),route=RouAd,method="mixed",
-                  tau=tau,dur=0){
+                  grp=NULL,dtype=NULL,auc=c(0,24),route=RouAd,method="linear-log",
+                  tau=24,dur=0,bE=FALSE){
   
-ncappc(obsFile = data,  
-       #grNm = grp, gr =NULL,
-       #flNm = NULL, flag = NULL, 
-       doseNm = ds, dose = NULL,
+ncappc(obsFile = data, doseTime = 0,
        concUnit = "[ng].[mL]", timeUnit = "[hr]", doseUnit = "[mg]",
        doseNormUnit = NULL, obsLog = "FALSE", idNmObs = id, timeNmObs = time,
-       concNmObs = pk, AUCTimeRange = auc, backExtrp = bE,
+       concNmObs = pk, AUCTimeRange = auc, backExtrp = "FALSE",
        LambdaTimeRange = NULL, LambdaExclude = NULL, doseAmtNm = ds,
        adminType = route, doseType = dtype, Tau = tau, TI = dur,
        method = method, timeFormat = "number",  
        tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs",
-                  "Vz_obs", "Cl_obs", "HL_Lambda_z"), figFormat = "png",  noPlot = "TRUE",
+                  "Vz_obs", "Cl_obs", "HL_Lambda_z"), 
+       figFormat = "png",  noPlot = "TRUE",
        printOut = "FALSE", studyName = "test")
 return(list(ncaOutput,ObsStat))
 }
