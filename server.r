@@ -215,7 +215,7 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile))
       return() 
     radioButtons("method", "Estimation Method",
-                 c("mixed","linear","log-linear"))
+                 c("linear-log","linear","log"))
   })
   
   
