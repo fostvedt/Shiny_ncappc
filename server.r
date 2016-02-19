@@ -3,18 +3,18 @@ library(shiny)
 library(devtools)
 library(ggplot2)
 library(grid)
-install_github("cacha0227/ncappc")
+#install_github("cacha0227/ncappc")
 source("PKhelpers.R")
 source("NCAhelpers.R")
 library(ncappc)
 
 shinyServer(function(input, output) {
   
-####################################################
-# 
-# Code for front page UI
-# 
-####################################################
+  ####################################################
+  # 
+  # Code for front page UI
+  # 
+  ####################################################
   
   
   
@@ -25,9 +25,9 @@ shinyServer(function(input, output) {
   output$read_Origfile <- renderUI({
     fileInput("origfile",label="Insert PK file",accept=c('.csv','.txt','.sim','.dat'))    
   })
-
   
- 
+  
+  
   # Time Variable
   # This UI selects the Time variable. Usually this will
   # be on the x-axis for a PK-conc plot
@@ -113,7 +113,7 @@ shinyServer(function(input, output) {
     selectInput("Day", "Choose Day", choices = choice.temp )
   })
   
-   
+  
   # Extra Stratification variables
   # e.g. fed/fasted
   # must be selected from the variables uplaoded
@@ -125,12 +125,27 @@ shinyServer(function(input, output) {
     } else
     { choice.temp<-c(" ",colnames(origData))
     }    
-    
-    selectizeInput("Group", "Choose Other Grouping", choices = choice.temp,
-                multiple=T,options = list(maxItems = 3) )
+    selectizeInput("Group", "Stratify by\n(up to 3)", choices = choice.temp,
+                   multiple=T,options = list(maxItems = 3) )
   })
-
- 
+  
+  
+  output$conc_units <- renderUI({
+    if(is.null(input$origfile) | is.null(origData)) return()
+    textInput("cunits", "Conc Units (eg \"ng/ml\")", value="ng/ml")
+  })
+  
+  output$dose_units <- renderUI({
+    if(is.null(input$origfile) | is.null(origData)) return()
+    textInput("dunits", "Dose Units (eg \"mg\")", value="mg")
+  })
+  
+  output$time_units <- renderUI({
+    if(is.null(input$origfile)| is.null(origData))
+      return()
+    radioButtons("tunits", "Time Units", choices = c("minutes","hours","days"),selected="hours" )
+  })
+  
   
   # This is outputted so that the user can see
   # what data they have available to choose from when 
@@ -138,7 +153,8 @@ shinyServer(function(input, output) {
   output$summary <- renderPrint({
     if(is.null(input$origfile) | is.null(origData))
     { return()
-    } else
+    } 
+    else
     { 
       summary(origData)
     }
@@ -157,13 +173,13 @@ shinyServer(function(input, output) {
     newLine2 <- newLine[which(newLine!= " ")]
     dat <- origData[,newLine2]
     
-    gnam <- paste0("Group",1:length(input$Group))
+    gnam <- paste0("Level",1:length(input$Group))
     nam <- c("ID","Time","Conc","Treatment","AMT", gnam)
     
     if(length(newLine2)<=1){ return()}
     else{
-    colnames(dat) <- nam[which(newLine!= " ")]
-    return(dat)
+      colnames(dat) <- nam[which(newLine!= " ")]
+      return(dat)
     }
   }) 
   
@@ -171,12 +187,11 @@ shinyServer(function(input, output) {
   # in the NCA
   #output$Data <-  renderPrint({ head(newEntry()) })
   output$Data <-  renderDataTable({ 
-    if(is.null(input$origfile) | is.null(origData))
-     return()
+    if(is.null(input$origfile) | is.null(origData))  return()
     if( is.null(newEntry()) | is.vector(newEntry())) return()
-     #else  head(origData)
+    #else  head(origData)
     else head(newEntry())
-    })
+  })
   
   
   ####################################################
@@ -195,10 +210,10 @@ shinyServer(function(input, output) {
   })
   
   output$choose_DUR <- renderUI({
-    if(is.null(input$origfile) | is.null(origData))
-    return()
+    if(is.null(input$origfile) | is.null(origData) | input$route!="iv-infusion")
+      return()
     
-    numericInput("DUR", "Duration of Infusion (hours)", min=0,max=12,value=1)
+    numericInput("DUR", "Duration of Infusion (hours)", min=0,max=12,value=0)
   })
   
   
@@ -215,7 +230,7 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile))
       return() 
     radioButtons("method", "Estimation Method",
-                 c("linear-log","linear","log"))
+                 c("Linear Up - Log Down","Linear-Log Trapezoid","log"))
   })
   
   
@@ -224,7 +239,9 @@ shinyServer(function(input, output) {
   # The output is not returned though :/ from ncappc
   
   output$AUC <- renderUI({
-    sliderInput("AUCmax", "select AUC interval",
+    if(is.null(input$origfile))
+      return()
+    sliderInput("AUCmax", "Partial AUC",
                 min=0,max=150,value=c(0,24))
   })
   
@@ -232,8 +249,8 @@ shinyServer(function(input, output) {
   output$dosefreq <- renderUI({
     if(is.null(input$origfile) | is.null(origData))
       return() 
-    numericInput("dfreq", "Dosing Frequency (hours)",
-                value=24,min=0,max=168)
+    numericInput("dfreq", "Tau (hours)",
+                 value=24,min=0,max=168)
   })
   
   
@@ -248,9 +265,10 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
     else 
-    nca.est(newEntry(), input$AUCmax,input$route,input$method, input$Sched,input$dfreq,input$DUR)
+      nca.est(newEntry(), input$AUCmax,input$route,input$method, input$Sched,input$dfreq,input$DUR,
+              input$cunits,input$dunits,input$tunits)
   })
-    
+  
   output$NCAval <- renderDataTable({
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
@@ -264,10 +282,10 @@ shinyServer(function(input, output) {
     else 
       NCAestimates()[[2]]
   })
-
-#  output$NCA = renderPrint({  
-#    NCAd()
-#})
+  
+  #  output$NCA = renderPrint({  
+  #    NCAd()
+  #})
   
   output$downloadNCA <- downloadHandler(
     filename = function() {paste0("NCAest", '.csv')},
@@ -292,13 +310,13 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile) | is.null(input$Xvar)| is.null(input$Yvar))
       return()
     else if(input$Xvar==" " | input$Yvar==" ") 
-           return()
+      return()
     else if(input$IDvar==" " & input$TRTvar== " ")  
-          XYplot.orig(origData,input$Xvar,input$Yvar)
+      XYplot.orig(origData,input$Xvar,input$Yvar)
     else if(input$TRTvar==" ")
-          PK.ID.orig(origData,input$Xvar,input$Yvar,input$IDvar)  
+      PK.ID.orig(origData,input$Xvar,input$Yvar,input$IDvar)  
     else
-          PK.TRT.orig(origData,input$Xvar,input$Yvar,input$IDvar,input$TRTvar)  
+      PK.TRT.orig(origData,input$Xvar,input$Yvar,input$IDvar,input$TRTvar)  
   }) #closing render plot
   
   output$table<-renderTable({
