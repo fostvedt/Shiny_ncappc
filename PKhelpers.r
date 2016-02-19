@@ -14,7 +14,7 @@ XYplot.orig<-function(orig.data,X.name,Y.name,ID.name)
   Y.t<-orig.data[,Y.name]
   new.data<-data.frame(X.t=X.t,Y.t=Y.t)
   ggplot( data=new.data, aes(x=X.t, y=Y.t))+
-     geom_point()+geom_line()+labs(x=X.name,y=Y.name) + scale_y_log10()
+    geom_point()+geom_line()+labs(x=X.name,y=Y.name) + scale_y_log10()
 }   
 
 
@@ -43,7 +43,7 @@ PK.TRT.orig<-function(orig.data,X.name,Y.name,ID.name,TRT)
 
 
 #ncappc(obsFile=dsingle, doseNm="Dose", doseAmtNm = "Dose", idNmObs="ID", timeNmObs="Time", concNmObs = "Conc", 
- #      tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs", "Vz_obs", "Cl_obs", "HL_Lambda_z"), noPlot = "TRUE")
+#      tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs", "Vz_obs", "Cl_obs", "HL_Lambda_z"), noPlot = "TRUE")
 
 NCA.PPC.SINGLE<-function(orig.data,X.name,Y.name,ID.name,DOSE)
 {  
@@ -61,7 +61,7 @@ NCA.PPC.SINGLE<-function(orig.data,X.name,Y.name,ID.name,DOSE)
          method = "mixed", timeFormat = "number",  tabCol = c("AUClast", "Cmax", "Tmax", "AUCINF_obs",
                                                               "Vz_obs", "Cl_obs", "HL_Lambda_z"),# figFormat = "png",  
          noPlot = "TRUE", #printOut = "TRUE", studyName = "test"
-         )
+  )
 }
 
 
