@@ -41,7 +41,9 @@ shinyUI(fluidPage(
                                          column(3,uiOutput("Route"),
                                                 uiOutput("choose_DUR")),
                                          column(3, uiOutput("DoseSchedule"),
-                                                uiOutput("dosefreq")),
+                                                uiOutput("dosefreq"),
+                                                uiOutput("imp_t0_ui"),
+                                                uiOutput("dosetimess")),
                                          column(3,uiOutput("AUC")),
                                          br() )
                       )),
@@ -79,17 +81,17 @@ shinyUI(fluidPage(
              tabPanel("About", 
                       #want another commit          
                       h6("The App performs Non-Compartmental Analysis with the ncappc R library.
-                         The program is relient on free, open-source software and libraries that are made 
-                         available without warranty. No strenuous validation of this App has been conducted. 
-                         The code is available on github at www.github.com/fostvedt/shiny_ncappc."),
+                               The program is relient on free, open-source software and libraries that are made 
+                               available without warranty. No strenuous validation of this App has been conducted. 
+                               The code is available on github at www.github.com/fostvedt/shiny_ncappc."),
                       helpText( a("ncappc package documentation",
                                   target="_blank",
                                   href="https://github.com/cacha0227/ncappc/blob/master/vignettes/ncappc-vignette.md")),
                       includeMarkdown("ncappcabout.Rmd"),
                       br()
-                      )
-)
-
+             )
+  )
+  
 )          
 ) # close navbarPanel
 #      ) #close UI

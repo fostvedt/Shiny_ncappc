@@ -16,8 +16,6 @@ shinyServer(function(input, output) {
   # 
   ####################################################
   
-  
-  
   # This is setting up the file upload
   # The idea is that anyone can upload their own file
   # and get NCA estimates along with plots
@@ -233,6 +231,12 @@ shinyServer(function(input, output) {
                  c("Linear Up - Log Down","Linear-Log Trapezoid","log"))
   })
   
+  output$imp_t0_ui <- renderUI({
+    if(is.null(input$origfile)) return()
+    if(input$Sched == "Non-Steady State" & input$route!="iv-bolus")
+      radioButtons("imp_t0", "Impute Time 0 as C=0", c("Impute","Do Not Impute"))
+  })
+  
   
   # The function requires an AUC time interval
   # The default is (0,24)
@@ -241,19 +245,28 @@ shinyServer(function(input, output) {
   output$AUC <- renderUI({
     if(is.null(input$origfile))
       return()
-    sliderInput("AUCmax", "Partial AUC",
-                min=0,max=150,value=c(0,24))
+    if(input$Sched == "Steady State"){
+      sliderInput("AUCmax", "Partial AUC",
+                  min=0,max=input$dfreq,value=c(0,24))}
+    else{
+      sliderInput("AUCmax", "Partial AUC",
+                  min=0,max=150,value=c(0,24))} 
   })
   
   
   output$dosefreq <- renderUI({
-    if(is.null(input$origfile) | is.null(origData))
-      return() 
-    numericInput("dfreq", "Tau (hours)",
-                 value=24,min=0,max=168)
+    if(is.null(input$origfile)) return()
+    if(input$Sched == "Steady State") 
+      numericInput("dfreq", "Tau (hours)",
+                   value=24,min=0,max=168)
   })
   
-  
+  output$dosetimess <- renderUI({
+    if(is.null(input$origfile)) return()
+    if(input$Sched == "Steady State") 
+      numericInput("dtimess", "Steady-state Dosing Time (hrs)",
+                   value=24,min=0,max=1000)
+  })
   
   ####################################################
   # code for NCA estimation
