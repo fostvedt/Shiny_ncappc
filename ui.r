@@ -26,7 +26,6 @@ shinyUI(fluidPage(
                                                 uiOutput("choose_DOSE"),
                                                 br()),
                                          column(width=3,
-                                                uiOutput("choose_TRT"),
                                                 uiOutput("choose_extra"),
                                                 br() ),
                                          column(width=3,
@@ -59,8 +58,16 @@ shinyUI(fluidPage(
                                  br()
                         ),
                         tabPanel("Visuals",
-                                 plotOutput("plot"),
-                                 br()
+                                 sidebarPanel(
+                                   selectInput('x', 'Time', choices=colnames(origData) ),
+                                   selectInput('y', 'Concentration', choices=colnames(origData) ),
+                                   uiOutput("choose_TRT"),
+                                   br()
+                                 ),
+                                 mainPanel(
+                                   plotOutput("plot"),
+                                   br()
+                                 )
                         )),
              
              navbarMenu("NCA Results",
@@ -76,24 +83,32 @@ shinyUI(fluidPage(
                                  downloadButton("downloadNCAstat","Download NCA Summary Statistics"),
                                  dataTableOutput("NCAstat"),
                                  br()
+                        ),
+                        tabPanel("Visualize Results",
+                                 uiOutput("choose_PKvar"),
+                                 #uiOutput("choose_facet_row"),
+                                 #uiOutput("choose_facet_col"),
+                                 plotOutput("PlotNCA"),
+                                 verbatimTextOutput("classNCA"),
+                                 br()
                         )
              ),
              tabPanel("About", 
                       #want another commit          
                       h6("The App performs Non-Compartmental Analysis with the ncappc R library.
-                               The program is relient on free, open-source software and libraries that are made 
-                               available without warranty. No strenuous validation of this App has been conducted. 
-                               The code is available on github at www.github.com/fostvedt/shiny_ncappc."),
+                         The program is relient on free, open-source software and libraries that are made 
+                         available without warranty. No strenuous validation of this App has been conducted. 
+                         The code is available on github at www.github.com/fostvedt/shiny_ncappc."),
                       helpText( a("ncappc package documentation",
                                   target="_blank",
                                   href="https://github.com/cacha0227/ncappc/blob/master/vignettes/ncappc-vignette.md")),
                       includeMarkdown("ncappcabout.Rmd"),
                       br()
-             )
-  )
-  
+                      )
+)
+
 )          
 ) # close navbarPanel
-#      ) #close UI
+
 
 
