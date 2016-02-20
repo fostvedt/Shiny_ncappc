@@ -165,14 +165,13 @@ shinyServer(function(input, output) {
     newLine <- c(ID=input$IDvar, 
                  Time = input$Xvar,
                  Conc = input$Yvar,
-                 Treatment = input$TRTvar,
                  AMT = input$AMT,
                  Group = input$Group)
     newLine2 <- newLine[which(newLine!= " ")]
     dat <- origData[,newLine2]
     
     gnam <- paste0("Level",1:length(input$Group))
-    nam <- c("ID","Time","Conc","Treatment","AMT", gnam)
+    nam <- c("ID","Time","Conc","AMT", gnam)
     
     if(length(newLine2)<=1){ return()}
     else{
@@ -188,7 +187,7 @@ shinyServer(function(input, output) {
     if(is.null(input$origfile) | is.null(origData))  return()
     if( is.null(newEntry()) | is.vector(newEntry())) return()
     #else  head(origData)
-    else head(newEntry())
+    else newEntry()
   })
   
   
@@ -285,8 +284,8 @@ shinyServer(function(input, output) {
   output$NCAval <- renderDataTable({
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
-    else 
-      NCAestimates()[[1]]
+    d1 <<- as.data.frame(NCAestimates()[1])
+    return(d1)
   })
   
   output$NCAstat <- renderDataTable({
@@ -296,9 +295,6 @@ shinyServer(function(input, output) {
       NCAestimates()[[2]]
   })
   
-  #  output$NCA = renderPrint({  
-  #    NCAd()
-  #})
   
   output$downloadNCA <- downloadHandler(
     filename = function() {paste0("NCAest", '.csv')},
@@ -314,9 +310,57 @@ shinyServer(function(input, output) {
     }
   )
   
+  ####################################################
+  # code for plot NCA parameter estimates
+  ####################################################
+  
+  output$choose_PKvar <- renderUI({
+    if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
+      return()
+    d1 <- as.data.frame(NCAestimates()[1])
+    selectInput("ncavar","Select NCA PK Parameter", choices=colnames(d1)[-1])
+  })
+  
+  output$choose_facet_row <- renderUI({
+    if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
+      return()
+    selectInput('facet_row', 'Facet Row', c(None='.', input$Group))
+  })
+  
+  output$choose_facet_col <- renderUI({
+    if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
+      return()
+    selectInput('facet_col', 'Facet Column', c(None='.', input$Group))
+  })
+  
+  
+  NCAestdata <- reactive({
+    as.data.frame(NCAestimates()[1])
+  })
+  
+  output$classNCA <- renderPrint({
+    if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
+      return()
+    head(NCAestdata())
+  })
+  
+  
+  output$PlotNCA <- renderPlot({
+    if(is.null(input$origfile) | is.null(origData) | is.null(NCAestdata()) )
+      return()
+    d1 <- NCAestdata()
+    a <- as.numeric(as.character((d1[,input$ncavar])))
+     hist(a)
+    
+    # facets <- paste(input$facet_row, '~', input$facet_col)
+    # if (facets != '. ~ .')
+    # p <- p + facet_grid(facets)
+  })
+  
+  
   
   ####################################################
-  # code for graphics using NCA estimates
+  # code for graphics of raw data
   ####################################################
   
   output$plot<-renderPlot({
