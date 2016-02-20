@@ -284,7 +284,7 @@ shinyServer(function(input, output) {
   output$NCAval <- renderDataTable({
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
-    d1 <<- as.data.frame(NCAestimates()[1])
+    d1 <- as.data.frame(NCAestimates()[1])
     return(d1)
   })
   
