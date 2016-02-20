@@ -1,4 +1,6 @@
-
+# this broke somewhere so the origData is being defined as NULL
+# here since it seems to solve the problem.
+origData <<- NULL
 
 shinyUI(fluidPage( 
   
