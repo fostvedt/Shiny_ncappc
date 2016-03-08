@@ -348,13 +348,18 @@ shinyServer(function(input, output) {
   output$PlotNCA <- renderPlot({
     if(is.null(input$origfile) | is.null(origData) | is.null(NCAestdata()) )
       return()
-    d1 <- NCAestdata()
-    a <- as.numeric(as.character((d1[,input$ncavar])))
-    hist(a)
+    d1 <- as.data.frame(NCAestdata())
+    a <- data.frame(
+      xvar = as.numeric(as.character((d1[,input$ncavar])))
+#      frowvar = as.character((d1[,input$facet_row])),
+#      fcolvar = as.character((d1[,input$facet_col]))
+    )
+    p <- ggplot(data=a,aes(x=xvar))+geom_histogram()
     
-    # facets <- paste(input$facet_row, '~', input$facet_col)
-    # if (facets != '. ~ .')
-    # p <- p + facet_grid(facets)
+    #facets <- paste(input$facet_row, '~', input$facet_col)
+    #if (facets != '. ~ .')
+    #p <- p + facet_grid(facets)
+    return(p)
   })
   
   

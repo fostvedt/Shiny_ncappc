@@ -85,10 +85,10 @@ shinyUI(fluidPage(
                                  br()
                         ),
                         tabPanel("Visualize Results",
-                                 uiOutput("choose_PKvar"),
-                                 #uiOutput("choose_facet_row"),
-                                 #uiOutput("choose_facet_col"),
-                                 plotOutput("PlotNCA"),
+                                 column(3, uiOutput("choose_PKvar"),
+                                 uiOutput("choose_facet_row"),
+                                 uiOutput("choose_facet_col")),
+                                 column(9,plotOutput("PlotNCA")),
                                  verbatimTextOutput("classNCA"),
                                  br()
                         )
