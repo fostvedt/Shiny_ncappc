@@ -1,7 +1,5 @@
-# this broke somewhere so the origData is being defined as NULL
-# here since it seems to solve the problem.
-origData <<- NULL
 
+origData<<-NULL
 shinyUI(fluidPage( 
   
   navbarPage("", selected = "NCA",id="nav", inverse="FALSE", title="Non-Compartmental Analysis",
@@ -98,17 +96,17 @@ shinyUI(fluidPage(
              tabPanel("About", 
                       #want another commit          
                       h6("The App performs Non-Compartmental Analysis with the ncappc R library.
-                         The program is relient on free, open-source software and libraries that are made 
-                         available without warranty. No strenuous validation of this App has been conducted. 
-                         The code is available on github at www.github.com/fostvedt/shiny_ncappc."),
+                               The program is relient on free, open-source software and libraries that are made 
+                               available without warranty. No strenuous validation of this App has been conducted. 
+                               The code is available on github at www.github.com/fostvedt/shiny_ncappc."),
                       helpText( a("ncappc package documentation",
                                   target="_blank",
                                   href="https://github.com/cacha0227/ncappc/blob/master/vignettes/ncappc-vignette.md")),
                       includeMarkdown("ncappcabout.Rmd"),
                       br()
-                      )
-)
-
+             )
+  )
+  
 )          
 ) # close navbarPanel
 

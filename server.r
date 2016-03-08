@@ -12,7 +12,7 @@ shinyServer(function(input, output) {
   
   ####################################################
   # 
-  # Code for front page UI
+  #Code for front page UI
   # 
   ####################################################
   
@@ -284,7 +284,7 @@ shinyServer(function(input, output) {
   output$NCAval <- renderDataTable({
     if(is.null(input$origfile) | is.null(origData) | is.null(newEntry()) )
       return()
-    d1 <- as.data.frame(NCAestimates()[1])
+    d1 <<- as.data.frame(NCAestimates()[1])
     return(d1)
   })
   
@@ -350,7 +350,7 @@ shinyServer(function(input, output) {
       return()
     d1 <- NCAestdata()
     a <- as.numeric(as.character((d1[,input$ncavar])))
-     hist(a)
+    hist(a)
     
     # facets <- paste(input$facet_row, '~', input$facet_col)
     # if (facets != '. ~ .')
